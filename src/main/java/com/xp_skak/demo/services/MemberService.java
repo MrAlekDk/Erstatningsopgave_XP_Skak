@@ -23,4 +23,8 @@ public class MemberService {
         memberRep.findAll().forEach(member -> allMembers.add(member));
         return allMembers;
     }
+
+    public Member getSpecificMember(int i) {
+        return memberRep.findById(Long.valueOf(i)).get();
+    }
 }
