@@ -1,0 +1,24 @@
+html{
+    scroll-behavior: smooth;
+    background-image: url("../images/xp.jpeg");
+    background-repeat: no-repeat;
+    background-size: auto;
+    height: 100%;
+    width: 100%;
+
+}
+
+h1{
+    height: 130px;
+    background: aliceblue;
+    opacity: 75%;
+    width:80%;
+    margin:0 auto;
+    align-self: center;
+    font-family: "Malgun Gothic";
+    font-size: 75px;
+    font-weight: bold;
+    color:black;
+    text-align: center;
+    border-radius: 10px;
+}

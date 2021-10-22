@@ -48,7 +48,6 @@ class MemberServiceTest {
         List<Member> testList = memberService.getAllMembers();
 
         assertEquals(4, testList.size());
-
     }
 
     @Test
@@ -57,5 +56,7 @@ class MemberServiceTest {
         Member tmp = memberService.getSpecificMember(1);
 
         assertEquals("Alek", tmp.getName());
+        assertEquals("42424242", tmp.getPhoneNr());
+        assertEquals("email@gmail.com", tmp.getEmail());
     }
 }

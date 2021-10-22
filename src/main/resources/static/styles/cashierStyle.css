@@ -1,0 +1,27 @@
+.members{
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+
+tr{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    border: solid 1px black;
+}
+
+th{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+thead,tbody{
+    background-color: white;
+    border: solid 1px black;
+    font-family: "Malgun Gothic";
+}

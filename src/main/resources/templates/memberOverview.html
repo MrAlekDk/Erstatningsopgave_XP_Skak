@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/styles/standardStyle.css}" rel="stylesheet">
+    <link th:href="@{/styles/cashierStyle.css}" rel="stylesheet">
+    <title>Member-overview</title>
+</head>
+<body>
+<h1>XP Skak klub</h1>
+
+<table class="members" id="members">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Birthday</th>
+        <th>Phone number</th>
+        <th>Email</th>
+        <th>Rank</th>
+    </tr>
+    </thead>
+    <tbody class="table-body" id="t-body">
+    <!-- <tr>
+        <td>Alexander</td>
+        <td>1998-07-13</td>
+        <td>42772069</td>
+        <td>alex030t@stud.kea.dk</td>
+    </tr> -->
+    </tbody>
+</table>
+<section>
+
+</section>
+</body>
+</html>
+<script>
+    let members = []
+    let tableBody = document.getElementById("tbody")
+
+    fetch('http://localhost:8080/members')
+    .then(response => response.json())
+    .then(data =>{
+        members = data
+        buildRows()
+    })
+
+
+    function buildRows(){
+        let rows = members.map(member => {
+            return `<tr class="member-box">
+            <td>${member.name}</td>
+            <td>${member.birthday}</td>
+            <td>${member.phoneNr}</td>
+            <td>${member.email}</td>
+            <td>${member.rank}</td>
+        </tr>`;
+        })
+
+        document.getElementById("t-body").innerHTML = rows.join("")
+    }
+
+</script>
