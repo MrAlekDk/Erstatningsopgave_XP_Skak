@@ -22,7 +22,7 @@ public class CashierController {
     public ResponseEntity<List<Member>> getAllMembers(){
 
         List<Member> allMembers = memberService.getAllMembers();
-        System.out.println(allMembers.get(0).getBirthday());
+
         return ResponseEntity.status(HttpStatus.OK).body(allMembers);
     }
 
@@ -32,7 +32,6 @@ public class CashierController {
             method = RequestMethod.POST
             )
     public ResponseEntity<Member> createNewMember(@RequestBody String test){
-
         System.out.println(test);
 
         return ResponseEntity.status(HttpStatus.OK).build();
