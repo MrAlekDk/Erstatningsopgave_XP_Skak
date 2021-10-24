@@ -4,9 +4,7 @@ import com.xp_skak.demo.models.Member;
 import com.xp_skak.demo.services.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,4 +25,17 @@ public class CashierController {
         System.out.println(allMembers.get(0).getBirthday());
         return ResponseEntity.status(HttpStatus.OK).body(allMembers);
     }
+
+
+    @RequestMapping(
+            value = "/members",
+            method = RequestMethod.POST
+            )
+    public ResponseEntity<Member> createNewMember(@RequestBody String test){
+
+        System.out.println(test);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 }
