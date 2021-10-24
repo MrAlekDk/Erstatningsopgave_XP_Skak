@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
 import static reactor.core.publisher.Mono.when;
 
 class MemberServiceTest {
@@ -61,6 +62,15 @@ class MemberServiceTest {
         assertEquals("Alek", tmp.getName());
         assertEquals("42424242", tmp.getPhoneNr());
         assertEquals("email@gmail.com", tmp.getEmail());
+    }
+
+    @Test
+    void createNewMember(){
+        Member memberTest = new Member("Alek",new Date(),"42424242","email@gmail.com");
+
+        memberService.addNewMember(memberTest);
+
+        Mockito.verify(memberRep, times(1)).save(Mockito.any(Member.class));
     }
 
     @Test

@@ -29,15 +29,14 @@ public class CashierController {
 
     @PostMapping(
             value = "/members")
-    public ResponseEntity<Member> createNewMember(@RequestBody String test){
-        System.out.println(test);
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Member> createNewMember(@RequestBody Member newMember){
+        memberService.addNewMember(newMember);
+        return ResponseEntity.status(HttpStatus.OK).body(newMember);
     }
 
     @PutMapping(value = "/members/{id}")
     public ResponseEntity<Member> updateMemberInformation(@RequestBody Member test, @PathVariable("id") String id){
-        System.out.println();
+        System.out.println(test);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }

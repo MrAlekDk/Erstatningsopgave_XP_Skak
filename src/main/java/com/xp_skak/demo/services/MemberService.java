@@ -33,4 +33,8 @@ public class MemberService {
 
         memberRep.deleteById(id);
     }
+
+    public void addNewMember(Member member) {
+        memberRep.save(member);
+    }
 }

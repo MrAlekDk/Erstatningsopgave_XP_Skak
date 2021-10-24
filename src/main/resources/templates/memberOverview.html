@@ -18,6 +18,7 @@
         <th>Email</th>
         <th>Rank</th>
         <th></th>
+        <th></th>
     </tr>
     </thead>
     <tbody class="table-body" id="t-body">
@@ -138,12 +139,20 @@
     }
 
     function showModal(user) {
+
+        console.log(user.birthday)
+
         const modal = document.getElementById("myModal");
         let span = document.getElementsByClassName("close")[0];
         document.getElementById("modal-title").innerText = user.id ? "Edit User" : "Add User"
         document.getElementById("member-id").innerText = user.id
         document.getElementById("member-name").value = user.name
-        document.getElementById("member-birthday").value = new Date(user.birthday)
+        if(user.id===null){
+            document.getElementById("member-birthday").value = user.birthday
+        }
+        else{
+            document.getElementById("member-birthday").value = user.birthday.split("T")[0]
+        }
         document.getElementById("member-phone").value = user.phoneNr
         document.getElementById("member-email").value = user.email
 
@@ -186,21 +195,14 @@
                 }
                 return res.json()
             })
-            .then(user => {
+            .then(member=> {
+                cache.addEdit(member,method)
                 fetchUsers()
+                document.getElementById("myModal").style.display = "none";
             })
             .catch(e => alert(e))
 
     }
-
-    /*function updateUser(evt){
-        evt.preventDefault()
-        evt.stopPropagation()
-        const target = evt.target
-        const idToEdit = Number(target.dataset.idEdit)
-        const user = cache.findById(idToEdit)
-        showModal(user)
-    }*/
 
     function deleteUser(){
         evt.preventDefault()
@@ -262,7 +264,7 @@
     function dateFormatter(a) {
         tmpDate = new Date(a.toString()).toDateString()
         d = tmpDate.split(" ")
-        return d[2] + " " + d[1] + " " + d[3]
+        return d[3] + " " + d[1] + " " + d[2]
     }
 
 </script>
