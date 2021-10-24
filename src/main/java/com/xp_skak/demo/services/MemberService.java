@@ -24,7 +24,13 @@ public class MemberService {
         return allMembers;
     }
 
-    public Member getSpecificMember(int i) {
-        return memberRep.findById(Long.valueOf(i)).get();
+    public Member getSpecificMember(Long i) {
+        return memberRep.findById(i).get();
+    }
+
+    public void deleteMemberById(Long id) {
+
+
+        memberRep.deleteById(id);
     }
 }

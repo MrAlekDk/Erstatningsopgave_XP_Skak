@@ -27,23 +27,27 @@ public class CashierController {
     }
 
 
-    @RequestMapping(
-            value = "/members",
-            method = RequestMethod.POST
-            )
+    @PostMapping(
+            value = "/members")
     public ResponseEntity<Member> createNewMember(@RequestBody String test){
         System.out.println(test);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PutMapping(value = "/members/{id}")
+    public ResponseEntity<Member> updateMemberInformation(@RequestBody Member test, @PathVariable("id") String id){
+        System.out.println();
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @RequestMapping(
-            value = "/members/{id}",
-            method = RequestMethod.PUT
-    )
-    public ResponseEntity<Member> updateMemberInformation(@RequestBody String test, @PathVariable("id") String id){
-        System.out.println(test);
 
+
+    @DeleteMapping(value = "/members/{id}")
+    public ResponseEntity<Member> deleteMember(@PathVariable("id") Long id){
+
+        memberService.deleteMemberById(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

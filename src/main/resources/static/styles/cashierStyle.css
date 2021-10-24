@@ -106,3 +106,9 @@ h5{
     flex-direction: column;
     width: 75%;
 }
+
+.btn-new-member{
+    align-self: center;
+    justify-self: center;
+    margin: 0 auto;
+}

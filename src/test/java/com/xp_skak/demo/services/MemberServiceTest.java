@@ -12,8 +12,10 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static reactor.core.publisher.Mono.when;
 
 class MemberServiceTest {
 
@@ -37,9 +39,11 @@ class MemberServiceTest {
         testList.add(memberTest2);
         testList.add(memberTest3);
         testList.add(memberTest4);
+
         Mockito.when(memberRep.findById(Long.valueOf(1))).thenReturn(java.util.Optional.of(memberTest));
 
         Mockito.when(memberRep.findAll()).thenReturn(testList);
+
 
     }
 
@@ -52,11 +56,21 @@ class MemberServiceTest {
 
     @Test
     void getSpecificMemberTest(){
-        int id = 1;
-        Member tmp = memberService.getSpecificMember(1);
+        Member tmp = memberService.getSpecificMember(Long.valueOf(1));
 
         assertEquals("Alek", tmp.getName());
         assertEquals("42424242", tmp.getPhoneNr());
         assertEquals("email@gmail.com", tmp.getEmail());
+    }
+
+    @Test
+    void deleteMemberTest(){
+
+        Member test = new Member("Alek",new Date(),"10101010","email@c.com");
+
+        Mockito.when(memberRep.findById(test.getId())).thenReturn(Optional.of(test));
+        memberService.deleteMemberById(test.getId());
+
+        Mockito.verify(memberRep).deleteById(test.getId());
     }
 }

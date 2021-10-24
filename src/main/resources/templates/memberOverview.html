@@ -64,7 +64,7 @@
         </div>
     </div>
 </div>
-<button id="create-user">Create new user</button>
+<button id="create-member" class="btn-new-member">Create new user</button>
 </body>
 </html>
 <script>
@@ -90,12 +90,39 @@
     const URL = 'http://localhost:8080/members'
 
     function setUpHandlers() {
-        document.getElementById("create-user").onclick = makeNewUser
+        document.getElementById("create-member").onclick = makeNewUser
         document.getElementById("btn-save").onclick = saveUser
-        document.getElementById("t-body").onclick = updateUser
+        document.getElementById("t-body").onclick = handleTableClick
+        document.getElementById("t-body").onclick = handleTableClick
     }
 
     setUpHandlers()
+
+    function handleTableClick(evt) {
+        evt.preventDefault()
+        evt.stopPropagation()
+        const target = evt.target;
+        //data-id-delete
+        if (target.dataset.idDelete) {
+            const idToDelete = Number(target.dataset.idDelete)
+            const options = {
+                method: "DELETE",
+                headers: {'Accept': 'application/json'}
+            }
+            fetch(URL+"/"+idToDelete,options)
+                .then(x=>{
+                    cache.deleteOne(idToDelete)
+                    fetchUsers()
+                })
+        }
+        //Observe change compared to video
+        if (target.dataset.idEdit) {
+            const idToEdit = Number(target.dataset.idEdit)
+            const user = cache.findById(idToEdit)
+            showModal(user)
+        }
+    }
+
 
     const cache = localCache();
     fetchUsers()
@@ -143,7 +170,6 @@
 
         //Figure out how to update local data
         const method = user.id ? "PUT" : "POST"
-        console.log(method)
         const url = (method === "PUT") ? URL + "/" + user.id : URL
         const options = {
             method: method,
@@ -167,15 +193,45 @@
 
     }
 
-    function updateUser(evt){
+    /*function updateUser(evt){
         evt.preventDefault()
         evt.stopPropagation()
         const target = evt.target
         const idToEdit = Number(target.dataset.idEdit)
         const user = cache.findById(idToEdit)
-        console.log(user.birthday)
-
         showModal(user)
+    }*/
+
+    function deleteUser(){
+        evt.preventDefault()
+        evt.stopPropagation()
+        const target = evt.target
+        const idToDelete = Number(target.dataset.idEdit)
+
+        cache.deleteOne(idToDelete)
+
+        const method = "DELETE"
+        const url = URL + "/" + idToDelete
+        const options = {
+            method: method,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        }
+        fetch(url, options)
+            .then(res => {
+                if (!res.ok) {
+                    throw "Error, member not created. Please make sure all inputs are correct"
+                }
+                return res.json()
+            })
+            .then(user => {
+                fetchUsers()
+            })
+            .catch(e => alert(e))
+            fetchUsers()
     }
 
     function fetchUsers() {
@@ -197,6 +253,7 @@
             <td>${member.email}</td>
             <td>${member.rank}</td>
             <td><Button data-id-edit=${member.id}>Edit member</Button></td>
+            <td><Button data-id-delete=${member.id}>Delete member</Button></td>
         </tr>`;
         })
         document.getElementById("t-body").innerHTML = rows.join("")
