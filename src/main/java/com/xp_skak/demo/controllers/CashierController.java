@@ -37,4 +37,14 @@ public class CashierController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    @RequestMapping(
+            value = "/members/{id}",
+            method = RequestMethod.PUT
+    )
+    public ResponseEntity<Member> updateMemberInformation(@RequestBody String test, @PathVariable("id") String id){
+        System.out.println(test);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
 }
