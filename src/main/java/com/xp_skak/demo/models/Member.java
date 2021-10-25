@@ -7,25 +7,32 @@ import java.util.Date;
 @Entity
 @Table(name = "members")
 public class Member {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false, updatable = false)
+    @Column(name = "id", nullable = false, unique = true, updatable = false)
     private Long id;
 
     Long team_id;
 
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "birthday")
     private Date birthday;
 
     @Column(name = "phonenr")
     private String phoneNr;
 
+    @Column(name = "email")
     private String email;
 
-    @Column(nullable = false)
+    @Column(name = "rank", nullable = false)
     private int rank;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "team_id", referencedColumnName = "id")
+    private Team team;
 
     private Long login_id;
 
@@ -38,6 +45,13 @@ public class Member {
         this.email = email;
     }
 
+    public Team getTeam() {
+        return team;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
 
     public Long getId() {
         return id;

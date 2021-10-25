@@ -20,7 +20,7 @@ public class MemberService {
 
     public List<Member> getAllMembers() {
         List<Member> allMembers = new ArrayList<>();
-        memberRep.findAll().forEach(member -> allMembers.add(member));
+        memberRep.findAll().forEach(allMembers::add);
         return allMembers;
     }
 

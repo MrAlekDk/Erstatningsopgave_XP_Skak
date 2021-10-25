@@ -27,8 +27,7 @@ public class CashierController {
     }
 
 
-    @PostMapping(
-            value = "/members")
+    @PostMapping(value = "/members")
     public ResponseEntity<Member> createNewMember(@RequestBody Member newMember){
         memberService.addNewMember(newMember);
         return ResponseEntity.status(HttpStatus.OK).body(newMember);
