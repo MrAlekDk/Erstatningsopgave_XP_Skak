@@ -139,9 +139,6 @@
     }
 
     function showModal(user) {
-
-        console.log(user.birthday)
-
         const modal = document.getElementById("myModal");
         let span = document.getElementsByClassName("close")[0];
         document.getElementById("modal-title").innerText = user.id ? "Edit User" : "Add User"
@@ -177,7 +174,6 @@
         user.phoneNr = document.getElementById("member-phone").value
         user.email = document.getElementById("member-email").value
 
-        //Figure out how to update local data
         const method = user.id ? "PUT" : "POST"
         const url = (method === "PUT") ? URL + "/" + user.id : URL
         const options = {
@@ -189,19 +185,13 @@
             body: JSON.stringify(user)
         }
         fetch(url, options)
-            .then(res => {
-                if (!res.ok) {
-                    throw "Error, member not created. Please make sure all inputs are correct"
-                }
-                return res.json()
-            })
             .then(member=> {
+                console.log("Yes den er god")
                 cache.addEdit(member,method)
                 fetchUsers()
                 document.getElementById("myModal").style.display = "none";
             })
             .catch(e => alert(e))
-
     }
 
     function deleteUser(){

@@ -35,8 +35,8 @@ public class CashierController {
     }
 
     @PutMapping(value = "/members/{id}")
-    public ResponseEntity<Member> updateMemberInformation(@RequestBody Member test, @PathVariable("id") String id){
-        System.out.println(test);
+    public ResponseEntity<Member> updateMemberInformation(@RequestBody Member updatedMember){
+        memberService.updateMember(updatedMember);
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }

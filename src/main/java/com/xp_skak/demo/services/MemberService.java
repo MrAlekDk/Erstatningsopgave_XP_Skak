@@ -37,4 +37,12 @@ public class MemberService {
     public void addNewMember(Member member) {
         memberRep.save(member);
     }
+
+    public void updateMember(Member memberUpdated) {
+
+        Member memberToUpdate = memberRep.findById(memberUpdated.getId()).get();
+
+        memberToUpdate = memberUpdated;
+        memberRep.save(memberToUpdate);
+    }
 }

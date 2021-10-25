@@ -30,10 +30,10 @@ class MemberServiceTest {
     void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        Member memberTest = new Member("Alek",new Date(),"42424242","email@gmail.com");
-        Member memberTest2 = new Member("Jens",new Date(),"42424242","email@gmail.com");
-        Member memberTest3 = new Member("Bent",new Date(),"42424242","email@gmail.com");
-        Member memberTest4 = new Member("Kurt",new Date(),"42424242","email@gmail.com");
+        Member memberTest = new Member("Alek", new Date(), "42424242", "email@gmail.com");
+        Member memberTest2 = new Member("Jens", new Date(), "42424242", "email@gmail.com");
+        Member memberTest3 = new Member("Bent", new Date(), "42424242", "email@gmail.com");
+        Member memberTest4 = new Member("Kurt", new Date(), "42424242", "email@gmail.com");
 
         List<Member> testList = new ArrayList<>();
         testList.add(memberTest);
@@ -53,20 +53,22 @@ class MemberServiceTest {
         List<Member> testList = memberService.getAllMembers();
 
         assertEquals(4, testList.size());
+        Mockito.verify(memberRep, times(1)).findAll();
     }
 
     @Test
-    void getSpecificMemberTest(){
+    void getSpecificMemberTest() {
         Member tmp = memberService.getSpecificMember(Long.valueOf(1));
 
         assertEquals("Alek", tmp.getName());
         assertEquals("42424242", tmp.getPhoneNr());
         assertEquals("email@gmail.com", tmp.getEmail());
+        Mockito.verify(memberRep, times(1)).findById(Long.valueOf(1));
     }
 
     @Test
-    void createNewMember(){
-        Member memberTest = new Member("Alek",new Date(),"42424242","email@gmail.com");
+    void createNewMember() {
+        Member memberTest = new Member("Alek", new Date(), "42424242", "email@gmail.com");
 
         memberService.addNewMember(memberTest);
 
@@ -74,9 +76,25 @@ class MemberServiceTest {
     }
 
     @Test
-    void deleteMemberTest(){
+    void updateMemberTest() {
+        Member memberToUpdate = memberService.getSpecificMember(Long.valueOf(1));
+        memberToUpdate.setId(Long.valueOf(1));
 
-        Member test = new Member("Alek",new Date(),"10101010","email@c.com");
+        memberService.updateMember(memberToUpdate);
+        memberToUpdate.setName("Alexander");
+
+        memberService.updateMember(memberToUpdate);
+
+
+        assertEquals("Alexander", memberService.getSpecificMember(Long.valueOf(1)).getName());
+        Mockito.verify(memberRep, times(2)).save(memberToUpdate);
+
+    }
+
+    @Test
+    void deleteMemberTest() {
+
+        Member test = new Member("Alek", new Date(), "10101010", "email@c.com");
 
         Mockito.when(memberRep.findById(test.getId())).thenReturn(Optional.of(test));
         memberService.deleteMemberById(test.getId());
