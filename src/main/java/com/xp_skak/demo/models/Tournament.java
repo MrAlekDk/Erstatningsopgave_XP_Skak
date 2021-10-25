@@ -21,8 +21,9 @@ public class Tournament {
     @Column(name = "date", nullable = false)
     private Date date;
 
-    //TODO Vi skal lige overveje om vores foreign key skal være i participants eller tournament tabellen.
-    @OneToOne(cascade = CascadeType.ALL)
+    //TODO Vi skal lige overveje om vores foreign key skal være i participants eller tournament tabellen og,
+    // ManyToOne eller OneToMany.
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "winner", referencedColumnName = "participants")
     private Participant participant;
 

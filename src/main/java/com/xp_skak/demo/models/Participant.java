@@ -17,8 +17,9 @@ public class Participant {
     private Member member;
 
 
-    //TODO Vi skal lige overveje om vores foreign key skal være i participants eller tournament tabellen.
-    @OneToOne(cascade = CascadeType.ALL)
+    //TODO Vi skal lige overveje om vores foreign key skal være i participants eller tournament tabellen,
+    // og ManyToOne eller OneToMany?.
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "tournament_id", referencedColumnName = "id")
     private Tournament tournament;
 

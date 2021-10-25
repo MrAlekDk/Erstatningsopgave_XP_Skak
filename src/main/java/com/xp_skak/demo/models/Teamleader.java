@@ -10,8 +10,7 @@ public class Teamleader {
     @Column(name = "id", unique = true, nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-
+    
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
     private Employee employee;
@@ -44,4 +43,5 @@ public class Teamleader {
     public void setTeam(Team team) {
         this.team = team;
     }
+
 }

@@ -30,8 +30,9 @@ public class Member {
     @Column(name = "rank", nullable = false)
     private int rank;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "team_id", referencedColumnName = "id")
+    //TODO skal det være ManyToOne eller OneToMany?
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "team_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Team team;
 
     private Long login_id;
