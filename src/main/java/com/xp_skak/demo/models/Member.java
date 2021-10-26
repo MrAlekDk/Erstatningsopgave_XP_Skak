@@ -37,6 +37,11 @@ public class Member {
 
     private Long login_id;
 
+    @OneToOne
+    @PrimaryKeyJoinColumn(referencedColumnName = "payment_id", name="payment_id")
+    @JsonProperty("member_paymentYOYO")
+    private Payment payment;
+
     public Member(){}
 
     public Member(String name, Date birthday, String phoneNr, String email) {

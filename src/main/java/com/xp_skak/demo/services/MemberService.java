@@ -3,6 +3,7 @@ package com.xp_skak.demo.services;
 
 import com.xp_skak.demo.models.Member;
 import com.xp_skak.demo.repositories.MembersRepository;
+import com.xp_skak.demo.repositories.PaymentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,10 +13,12 @@ import java.util.List;
 public class MemberService {
 
     MembersRepository memberRep;
+    PaymentRepository paymentRepository;
 
 
-    public MemberService(MembersRepository memberRep){
+    public MemberService(MembersRepository memberRep, PaymentRepository paymentRep){
         this.memberRep = memberRep;
+        this.paymentRepository = paymentRep;
     }
 
     public List<Member> getAllMembers() {
@@ -25,6 +28,7 @@ public class MemberService {
     }
 
     public Member getSpecificMember(Long i) {
+        System.out.println(paymentRepository.findById(Long.valueOf(100)).get().getId());
         return memberRep.findById(i).get();
     }
 
