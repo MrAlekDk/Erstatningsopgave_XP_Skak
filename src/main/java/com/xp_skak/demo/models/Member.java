@@ -39,7 +39,7 @@ public class Member {
 
     @OneToOne
     @PrimaryKeyJoinColumn(referencedColumnName = "payment_id", name="payment_id")
-    @JsonProperty("member_paymentYOYO")
+    @JsonProperty("member_payment")
     private Payment payment;
 
     public Member(){}

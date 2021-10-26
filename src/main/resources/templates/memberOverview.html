@@ -17,6 +17,7 @@
         <th>Phone number</th>
         <th>Email</th>
         <th>Rank</th>
+        <th>Last Payment Date</th>
         <th></th>
         <th></th>
     </tr>
@@ -244,6 +245,7 @@
             <td>${member.phoneNr}</td>
             <td>${member.email}</td>
             <td>${member.rank}</td>
+            <td>${dateFormatter(member.member_payment.lastPaymentDate)}</td>
             <td><Button data-id-edit=${member.id}>Edit member</Button></td>
             <td><Button data-id-delete=${member.id}>Delete member</Button></td>
         </tr>`;
