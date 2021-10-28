@@ -28,7 +28,6 @@ public class MemberService {
     }
 
     public Member getSpecificMember(Long i) {
-        System.out.println(paymentRepository.findById(Long.valueOf(100)).get().getId());
         return memberRep.findById(i).get();
     }
 
