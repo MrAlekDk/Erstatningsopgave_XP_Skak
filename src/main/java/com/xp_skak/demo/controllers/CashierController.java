@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
+@RequestMapping("/members")
 public class CashierController {
 
     MemberService memberService;
@@ -18,7 +19,7 @@ public class CashierController {
         this.memberService= memberService;
     }
 
-    @GetMapping("/members")
+    @GetMapping
     public ResponseEntity<List<Member>> getAllMembers(){
 
         List<Member> allMembers = memberService.getAllMembers();
@@ -27,13 +28,13 @@ public class CashierController {
     }
 
 
-    @PostMapping(value = "/members")
+    @PostMapping
     public ResponseEntity<Member> createNewMember(@RequestBody Member newMember){
         memberService.addNewMember(newMember);
         return ResponseEntity.status(HttpStatus.OK).body(newMember);
     }
 
-    @PutMapping(value = "/members/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<Member> updateMemberInformation(@RequestBody Member updatedMember){
         memberService.updateMember(updatedMember);
 
@@ -42,7 +43,7 @@ public class CashierController {
 
 
 
-    @DeleteMapping(value = "/members/{id}")
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity<Member> deleteMember(@PathVariable("id") Long id){
 
         memberService.deleteMemberById(id);
