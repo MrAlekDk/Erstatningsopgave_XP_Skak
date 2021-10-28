@@ -101,4 +101,13 @@ class MemberServiceTest {
 
         Mockito.verify(memberRep).deleteById(test.getId());
     }
+
+    @Test
+    void registerPaymentTest(){
+        Long id = Long.valueOf(1);
+
+        memberService.registerPayment(id);
+
+        //Mockito.verify(memberRep, times(1)).save(memberToUpdate);
+    }
 }

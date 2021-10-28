@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-<head>
+<head xmlns:th="http://www.w3.org/1999/xhtml">
     <meta charset="UTF-8">
     <link th:href="@{/styles/standardStyle.css}" rel="stylesheet">
     <link th:href="@{/styles/cashierStyle.css}" rel="stylesheet">
-    <title>Member overview</title>
+    <title>Member in restance</title>
 </head>
 <body>
 <h1>XP Skak klub</h1>
@@ -16,11 +14,8 @@
         <th>Birthday</th>
         <th>Phone number</th>
         <th>Email</th>
-        <th>Rank</th>
         <th>Payed</th>
-        <th></th>
-        <th></th>
-        <th></th>
+        <th>Pay amount</th>
     </tr>
     </thead>
     <tbody class="table-body" id="t-body">
@@ -71,34 +66,30 @@
 </body>
 </html>
 <script>
-    function localCache() {
+    function localCache(){
         let users = []
-        const addEdit = (user, method) => {
-            if (method === "POST") {
+        const addEdit = (user,method) =>{
+            if(method==="POST"){
                 users.push(user)
-            } else if (method === "PUT") {
-                users = users.map(u => u.id == user.id ? user : u)
+            }
+            else if(method==="PUT") {
+                users = users.map(u => u.id == user.id ? user: u)
             }
         }
         return {
-            getAll: () => users, //This is the same as above
-            addAll: (all) => users = all,
+            getAll : () => users , //This is the same as above
+            addAll : (all) => users = all,
             deleteOne: (id) => users = users.filter(u => u.id !== Number(id)),
-            findById: (id) => users.find(u => u.id == id),
-            addEdit: addEdit
+            findById : (id) => users.find(u => u.id == id ),
+            addEdit :addEdit
         }
     }
 
-    sessionStorage.setItem("URL", "http://localhost:8080/members");
-    //const URL = 'http://localhost:8080/members'
-    const URL = sessionStorage.getItem("URL")
+    const URL = 'http://localhost:8080/members'
 
     function setUpHandlers() {
-        document.getElementById("create-member").onclick = makeNewUser
-        document.getElementById("btn-save").onclick = saveUser
-        document.getElementById("t-body").onclick = handleTableClick
+        document.getElementById("create-member").onclick = handleTableClick
     }
-
     setUpHandlers()
 
     function handleTableClick(evt) {
@@ -106,26 +97,7 @@
         evt.stopPropagation()
         const target = evt.target;
         //data-id-delete
-        if (target.dataset.idDelete) {
-            const idToDelete = Number(target.dataset.idDelete)
-            const options = {
-                method: "DELETE",
-                headers: {'Accept': 'application/json'}
-            }
-            fetch(URL + "/" + idToDelete, options)
-                .then(x => {
-                    cache.deleteOne(idToDelete)
-                    fetchUsers()
-                })
-        }
         //Observe change compared to video
-        if (target.dataset.idEdit) {
-            const idToEdit = Number(target.dataset.idEdit)
-            const user = cache.findById(idToEdit)
-            showModal(user)
-        }
-
-        console.log(target.dataset.idPay)
         if(target.dataset.idPay){
             const idToDelete = Number(target.dataset.idDelete)
             const options = {
@@ -134,9 +106,9 @@
             }
             const idToPay = Number(target.dataset.idPay)
             fetch(URL+"/payments/"+idToPay,options)
-            .then(x=>{
-                fetchUsers()
-            })
+                .then(x=>{
+                    fetchUsers()
+                })
         }
     }
 
@@ -144,42 +116,6 @@
     const cache = localCache();
     fetchUsers()
 
-    function makeNewUser() {
-        showModal({
-            id: null,
-            name: " ",
-            birtday: " ",
-            phoneNr: " ",
-            email: " ",
-        })
-    }
-
-    function showModal(user) {
-        const modal = document.getElementById("myModal");
-        let span = document.getElementsByClassName("close")[0];
-        document.getElementById("modal-title").innerText = user.id ? "Edit User" : "Add User"
-        document.getElementById("member-id").innerText = user.id
-        document.getElementById("member-name").value = user.name
-        if (user.id === null) {
-            document.getElementById("member-birthday").value = user.birthday
-        } else {
-            document.getElementById("member-birthday").value = user.birthday.split("T")[0]
-        }
-        document.getElementById("member-phone").value = user.phoneNr
-        document.getElementById("member-email").value = user.email
-
-        modal.style.display = "block";
-
-        span.onclick = function () {
-            modal.style.display = "none";
-        }
-
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-    }
 
     function saveUser() {
         const user = {}
@@ -200,45 +136,13 @@
             body: JSON.stringify(user)
         }
         fetch(url, options)
-            .then(member => {
+            .then(member=> {
                 console.log("Yes den er god")
-                cache.addEdit(member, method)
+                cache.addEdit(member,method)
                 fetchUsers()
                 document.getElementById("myModal").style.display = "none";
             })
             .catch(e => alert(e))
-    }
-
-    function deleteUser() {
-        evt.preventDefault()
-        evt.stopPropagation()
-        const target = evt.target
-        const idToDelete = Number(target.dataset.idEdit)
-
-        cache.deleteOne(idToDelete)
-
-        const method = "DELETE"
-        const url = URL + "/" + idToDelete
-        const options = {
-            method: method,
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        }
-        fetch(url, options)
-            .then(res => {
-                if (!res.ok) {
-                    throw "Error, member not created. Please make sure all inputs are correct"
-                }
-                return res.json()
-            })
-            .then(user => {
-                fetchUsers()
-            })
-            .catch(e => alert(e))
-        fetchUsers()
     }
 
     function fetchUsers() {
@@ -263,10 +167,7 @@
             <td>${dateFormatter(member.birthday)}</td>
             <td>${member.phoneNr}</td>
             <td>${member.email}</td>
-            <td>${member.rank}</td>
             <td>${calculatePayment(member.member_payment.lastPaymentDate)}</td>
-            <td><Button data-id-edit=${member.id}>Edit member</Button></td>
-            <td><Button data-id-delete=${member.id}>Delete member</Button></td>
             <td>${payButton}</td>
         </tr>`;
         })
@@ -303,18 +204,19 @@
     }
 
     function calculateAmount(birthday){
+        let rykkerGebyr = 500;
         birthd = new Date(birthday)
         let ageDifMs = Date.now() - birthd
         let ageDate = new Date(ageDifMs); // miliseconds from epoch
         let age = Math.abs(ageDate.getUTCFullYear() - 1970);
         if(age<18){
-            return 250
+            return 250 + rykkerGebyr
         }
         if(age>17 && age<60){
-            return 650
+            return 650 + rykkerGebyr
         }
         if(age>59){
-            return 450
+            return 450 + rykkerGebyr
         }
 
     }
