@@ -7,19 +7,18 @@ import org.springframework.web.bind.annotation.PutMapping;
 @Controller
 public class ViewController {
 
-
     @GetMapping(value ="/cashier")
-    public String getAllMembers(){
+    public String getMemberOverview(){
         return "memberOverview";
-    }
-
-    @GetMapping(value= "/newMember")
-    public String getNewMemberForm(){
-        return "createMember.html";
     }
 
     @GetMapping(value="/match-registration")
     public String registerMatch(){
         return "matchRegistration.html";
+    }
+
+    @GetMapping(value ="/cashier/restance")
+    public String getMemberInRestanceOverview(){
+        return "membersInRestanceOverview.html";
     }
 }

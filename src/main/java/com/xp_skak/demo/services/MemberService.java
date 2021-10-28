@@ -2,11 +2,13 @@ package com.xp_skak.demo.services;
 
 
 import com.xp_skak.demo.models.Member;
+import com.xp_skak.demo.models.Payment;
 import com.xp_skak.demo.repositories.MembersRepository;
 import com.xp_skak.demo.repositories.PaymentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -38,7 +40,8 @@ public class MemberService {
     }
 
     public void addNewMember(Member member) {
-        memberRep.save(member);
+        Member tmp = memberRep.save(member);
+        paymentRepository.save(new Payment(tmp.getId()));
     }
 
     public void updateMember(Member memberUpdated) {
@@ -47,5 +50,11 @@ public class MemberService {
 
         memberToUpdate = memberUpdated;
         memberRep.save(memberToUpdate);
+    }
+
+    public void registerPayment(Long id) {
+        Payment tmp = paymentRepository.findById(id).get();
+        tmp.setLastPaymentDate(new Date());
+        paymentRepository.save(tmp);
     }
 }
