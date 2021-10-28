@@ -1,7 +1,11 @@
 package com.xp_skak.demo.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.xp_skak.demo.services.MemberService;
 
 import javax.persistence.*;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.temporal.Temporal;
 import java.util.Date;
 
 @Entity
@@ -37,6 +41,10 @@ public class Member {
 
     private Long login_id;
 
+
+    //private int memberAge = (int) Duration.between((Temporal) getBirthday(), LocalDateTime.now()).toDays() / 365;
+
+
     @OneToOne
     @PrimaryKeyJoinColumn(referencedColumnName = "payment_id", name="payment_id")
     @JsonProperty("member_payment")
@@ -50,6 +58,8 @@ public class Member {
         this.phoneNr = phoneNr;
         this.email = email;
     }
+
+
 
     public Team getTeam() {
         return team;

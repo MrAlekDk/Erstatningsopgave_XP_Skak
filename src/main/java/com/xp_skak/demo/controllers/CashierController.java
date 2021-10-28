@@ -26,7 +26,6 @@ public class CashierController {
         return ResponseEntity.status(HttpStatus.OK).body(allMembers);
     }
 
-
     @PostMapping(value = "/members")
     public ResponseEntity<Member> createNewMember(@RequestBody Member newMember){
         memberService.addNewMember(newMember);
@@ -39,8 +38,6 @@ public class CashierController {
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-
-
 
     @DeleteMapping(value = "/members/{id}")
     public ResponseEntity<Member> deleteMember(@PathVariable("id") Long id){

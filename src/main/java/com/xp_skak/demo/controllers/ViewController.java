@@ -17,4 +17,9 @@ public class ViewController {
     public String getNewMemberForm(){
         return "createMember.html";
     }
+
+    @GetMapping(value = "/match-registration")
+    public String registerMatch() {
+        return "matchRegistration.html";
+    }
 }

@@ -41,7 +41,7 @@ class MemberServiceTest {
         testList.add(memberTest3);
         testList.add(memberTest4);
 
-        Mockito.when(memberRep.findById(Long.valueOf(1))).thenReturn(java.util.Optional.of(memberTest));
+        Mockito.when(memberRep.findById(1L)).thenReturn(java.util.Optional.of(memberTest));
 
         Mockito.when(memberRep.findAll()).thenReturn(testList);
 
@@ -58,12 +58,12 @@ class MemberServiceTest {
 
     @Test
     void getSpecificMemberTest() {
-        Member tmp = memberService.getSpecificMember(Long.valueOf(1));
+        Member tmp = memberService.getSpecificMember(1L);
 
         assertEquals("Alek", tmp.getName());
         assertEquals("42424242", tmp.getPhoneNr());
         assertEquals("email@gmail.com", tmp.getEmail());
-        Mockito.verify(memberRep, times(1)).findById(Long.valueOf(1));
+        Mockito.verify(memberRep, times(1)).findById(1L);
     }
 
     @Test
@@ -77,8 +77,8 @@ class MemberServiceTest {
 
     @Test
     void updateMemberTest() {
-        Member memberToUpdate = memberService.getSpecificMember(Long.valueOf(1));
-        memberToUpdate.setId(Long.valueOf(1));
+        Member memberToUpdate = memberService.getSpecificMember(1L);
+        memberToUpdate.setId(1L);
 
         memberService.updateMember(memberToUpdate);
         memberToUpdate.setName("Alexander");
@@ -86,7 +86,7 @@ class MemberServiceTest {
         memberService.updateMember(memberToUpdate);
 
 
-        assertEquals("Alexander", memberService.getSpecificMember(Long.valueOf(1)).getName());
+        assertEquals("Alexander", memberService.getSpecificMember(1L).getName());
         Mockito.verify(memberRep, times(2)).save(memberToUpdate);
 
     }

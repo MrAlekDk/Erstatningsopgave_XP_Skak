@@ -6,7 +6,11 @@ import com.xp_skak.demo.repositories.MembersRepository;
 import com.xp_skak.demo.repositories.PaymentRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.temporal.Temporal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -16,7 +20,8 @@ public class MemberService {
     PaymentRepository paymentRepository;
 
 
-    public MemberService(MembersRepository memberRep, PaymentRepository paymentRep){
+
+    public MemberService(MembersRepository memberRep, PaymentRepository paymentRep) {
         this.memberRep = memberRep;
         this.paymentRepository = paymentRep;
     }
@@ -48,5 +53,29 @@ public class MemberService {
 
         memberToUpdate = memberUpdated;
         memberRep.save(memberToUpdate);
+    }
+
+    public static String setAgeCategory(Member member) {
+        Date memberBirthday = member.getBirthday();
+        LocalDateTime currentDay = LocalDateTime.now();
+
+        int memberAge = (int) Duration.between((Temporal) memberBirthday, currentDay).toDays() / 365;
+        //int memberAgeYear = memberAge / 365;
+
+
+
+        String ageCategory = null;
+
+        if (memberAge < 18) {
+        ageCategory = "Junior";
+        }
+        if (memberAge >= 18 && memberAge < 60) {
+        ageCategory = "Adult";
+        }
+        if (memberAge >= 60) {
+        ageCategory = "Senior";
+        }
+
+        return ageCategory;
     }
 }

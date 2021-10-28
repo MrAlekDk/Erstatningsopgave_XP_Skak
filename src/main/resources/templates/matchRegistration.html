@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/styles/standardStyle.css}" rel="stylesheet">
+    <title>Match Registration</title>
+</head>
+<body>
+<h1>XP Skat Klub</h1>
+
+
+
+
+<table hidden class="member" id="member">
+    <thead>
+    <th>Name</th>
+    <th>Birthday</th>
+    <th>Phone number</th>
+    <th>Email</th>
+    <th>Rank</th>
+    </thead>
+</table>
+
+
+<div id="myModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h4 id="modal-title">Register Match</h4>
+        <section class="form-box">
+            <form class="create-user">
+                <p hidden>User ID: <span id="member-id"></span></p>
+                <div class="input-line">
+                    <label for="member-winner">Player</label><br>
+                    <input type="text" id="member-winner" name="member-player-one" placeholder="Enter player id here"><br>
+                </div>
+                <div class="input-line">
+                    <label for="member-loser">Opponent</label><br>
+                    <input type="text" id="member-loser" name="member-player-two" placeholder="Enter player id here"><br>
+                </div>
+            </form>
+        </section>
+        <div class="modal-footer">
+            <button id="btn-save" type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+        </div>
+    </div>
+</div>
+
+
+</body>
+
+
+<script>
+    function localCache(){
+        let users = []
+        const addEdit = (user,method) =>{
+            if(method==="POST"){
+                users.push(user)
+            }
+            else if(method==="PUT") {
+                users = users.map(u => u.id == user.id ? user: u)
+            }
+        }
+        return {
+            getAll : () => users , //This is the same as above
+            addAll : (all) => users = all,
+            deleteOne: (id) => users = users.filter(u => u.id !== Number(id)),
+            findById : (id) => users.find(u => u.id == id ),
+            addEdit :addEdit
+        }
+    }
+
+    const URL = 'http://localhost:8080/members'
+
+
+
+    function saveRank() {
+        const modal = document.getElementById("myModal");
+        let span = document.getElementsByClassName("close")[0];
+
+        const winner = {}
+        const loser = {}
+
+        winner.id = Number(document.getElementById("member-winner").innerText)
+        loser.id = Number(document.getElementById("member-loser").innerText)
+/*
+        const method = winner.id ? "PUT" : "POST"
+        const url = (method === "PUT") ? URL + "/" + winner.id : URL
+        const options = {
+            method: method,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(winner)
+        }
+
+        const method = loser.id ? "PUT" : "POST"
+        const url = (method === "PUT") ? URL + "/" + loser.id : URL
+        const options = {
+            method: method,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(loser)
+        }
+        */
+
+        modal.style.display = "block";
+
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    }
+
+
+
+</script>
+</html>

@@ -7,7 +7,7 @@
     <title>Member overview</title>
 </head>
 <body>
-<h1>XP Skak klub</h1>
+<h1>XP Skak Klub</h1>
 
 <table class="members" id="members">
     <thead>
@@ -123,6 +123,10 @@
             const user = cache.findById(idToEdit)
             showModal(user)
         }
+
+        if (target.dataset.idUpdatePayment) {
+            console.log("Hey")
+        }
     }
 
 
@@ -236,8 +240,22 @@
             })
     }
 
+    function setAgeCategory(y){
+
+        if (y < 18){
+            return "Junior"
+        }
+        else if (y > 18 && y < 60){
+            return "Adult"
+        }
+        else {
+            return "Senior"
+        }
+    }
+
     function buildRows() {
         const members = cache.getAll()
+
         const rows = members.map(member => {
             return `<tr class="member-box">
             <td>${member.name}</td>
@@ -248,6 +266,7 @@
             <td>${dateFormatter(member.member_payment.lastPaymentDate)}</td>
             <td><Button data-id-edit=${member.id}>Edit member</Button></td>
             <td><Button data-id-delete=${member.id}>Delete member</Button></td>
+            <td><Button data-id-updatePayment=${member.id}>Update payment</Button></td>
         </tr>`;
         })
         document.getElementById("t-body").innerHTML = rows.join("")
