@@ -4,9 +4,34 @@
     <meta charset="UTF-8">
     <link th:href="@{/styles/standardStyle.css}" rel="stylesheet">
     <link th:href="@{/styles/matchRegistration.css}" rel="stylesheet">
-<head/>
+    <head/>
 <body>
 
+
+<table class="members" id="members">
+    <thead>
+    <tr>
+        <td>Id</td>
+        <th>Name</th>
+        <th>Rank</th>
+    </tr>
+    </thead>
+    <tbody class="table-body" id="t-body">
+    <tr>
+        <td>113</td>
+        <td>Alexander</td>
+        <td>13</td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="input-line">
+    <!--                  <label for="member-winner">Winner</label><br>
+                      <input type="text" id="member-winner" name="member-name" placeholder="Winners member id"
+                             required><br>
+  -->
+    <select name="member-winner" id="member-winner" required></select>
+</div>
 
 <div id="myModal" class="modal">
     <!-- Modal content -->
@@ -15,31 +40,27 @@
         <h5 id="modal-title"></h5>
         <section class="form-box">
             <form class="create-user">
-                <p hidden>User ID: <span id="member-id"></span></p>
-                <div class="input-line">
-                    <label for="member-winner">Winner</label><br>
-                    <input type="text" id="member-winner" name="member-name" placeholder="Winners member id" required><br>
-                </div>
+                <p>User ID: <span id="member-id"></span></p>
+
                 <div class="input-line">
                     <label for="game-type">Loser</label><br>
                     <input type="text" id="game-type" name="game-type" placeholder="Losers member id"
-                    required><br>
+                           required><br>
                 </div>
                 <div class="input-line">
                     <label for="match-date">Match date</label><br>
                     <input type="date" id="match-date" name="match-date"><br>
                 </div>
-                <div class="input-dropdown">
-                    <form action="/action_page.php">
+            </form>
+            <div class="input-dropdown">
+                <form>
                     <label for="match-type">Choose match type</label><br>
-
                     <select id="match-type" name="match-type">
                         <option value="tournament">Tournament</option>
                         <option value="match">Match</option>
                     </select>
-                    </form>
-                </div>
-            </form>
+                </form>
+            </div>
         </section>
         <div class="modal-footer">
             <button id="btn-save" type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
@@ -48,5 +69,138 @@
 </div>
 
 
+<div class="btn-register-match">
+    <button id="btn-register-match" type="button" class="btn btn-primary" data-bs-dismiss="modal">Register new match or
+        tournament winner
+    </button>
+</div>
+
 </body>
 </html>
+
+
+<script>
+    function localCache() {
+        let users = []
+        const addEdit = (user, method) => {
+            if (method === "POST") {
+                users.push(user)
+            } else if (method === "PUT") {
+                users = users.map(u => u.id == user.id ? user : u)
+            }
+        }
+        return {
+            getAll: () => users, //This is the same as above
+            addAll: (all) => users = all,
+            deleteOne: (id) => users = users.filter(u => u.id !== Number(id)),
+            findById: (id) => users.find(u => u.id == id),
+            addEdit: addEdit
+        }
+    }
+
+    const URL = sessionStorage.getItem("URL")
+
+    function setUpHandlers() {
+        document.getElementById("btn-save").onclick = updateRank;
+        document.getElementById("btn-register-match").onclick = handleTableClick
+    }
+
+    setUpHandlers()
+
+
+    const cache = localCache();
+    fetchUsers()
+
+    function fetchUsers() {
+        fetch(URL)
+            .then(response => response.json())
+            .then(data => {
+                cache.addAll(data)
+                buildRows()
+            })
+    }
+
+    function buildRows() {
+        const members = cache.getAll()
+        const rows = members.map(member => {
+            return `<tr class="member-box">
+            <td>${member.id}</td>
+            <td>${member.name}</td>
+            <td>${member.rank}</td>
+        </tr>`;
+        })
+        document.getElementById("t-body").innerHTML = rows.join("")
+    }
+
+    function handleTableClick(evt) {
+        evt.preventDefault()
+        evt.stopPropagation()
+        const target = evt.target;
+        console.log("handleTableClick")
+        //Observe change compared to video
+
+        //showModal()
+
+        if (target.dataset.idEdit) {
+            const idToEdit = Number(target.dataset.idEdit)
+            const loser = cache.findById(idToEdit)
+            const winner = cache.findById(idToEdit)
+
+            console.log(idToEdit)
+            console.log(loser)
+            console.log(winner)
+        }
+    }
+
+    function updateRank(winner, loser) {
+        let gameType;
+
+        const modal = document.getElementById("myModal");
+        let span = document.getElementsByClassName("close")[0];
+        //document.getElementById("modal-title").innerText = user.id ? "Edit User" : "Add User"
+        document.getElementById("member-winner").innerText = winner.get(0).selectedIndex
+        document.getElementById("member-loser").innerText = loser.id
+        document.getElementById("game-type").value = gameType;
+    }
+
+    function fetchUsers1() {
+        fetch(URL)
+            .then(response => response.json())
+            .then(data => {
+                let options = "";
+                data.forEach(function (key) {
+                    options += "<option>" + key["name"]
+                })
+                document.getElementById("member-winner").innerHTML = options;
+            })
+    }
+    fetchUsers1()
+
+
+
+
+
+    function showModal() {
+
+
+        let gameType;
+        const modal = document.getElementById("myModal");
+        let span = document.getElementsByClassName("close")[0];
+        //document.getElementById("modal-title").innerText = user.id ? "Edit User" : "Add User"
+
+        modal.style.display = "block";
+
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        btn-save
+    }
+
+</script>

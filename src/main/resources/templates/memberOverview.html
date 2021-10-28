@@ -70,26 +70,27 @@
 </body>
 </html>
 <script>
-    function localCache(){
+    function localCache() {
         let users = []
-        const addEdit = (user,method) =>{
-            if(method==="POST"){
+        const addEdit = (user, method) => {
+            if (method === "POST") {
                 users.push(user)
-            }
-            else if(method==="PUT") {
-                users = users.map(u => u.id == user.id ? user: u)
+            } else if (method === "PUT") {
+                users = users.map(u => u.id == user.id ? user : u)
             }
         }
         return {
-            getAll : () => users , //This is the same as above
-            addAll : (all) => users = all,
+            getAll: () => users, //This is the same as above
+            addAll: (all) => users = all,
             deleteOne: (id) => users = users.filter(u => u.id !== Number(id)),
-            findById : (id) => users.find(u => u.id == id ),
-            addEdit :addEdit
+            findById: (id) => users.find(u => u.id == id),
+            addEdit: addEdit
         }
     }
 
-    const URL = 'http://localhost:8080/members'
+    sessionStorage.setItem("URL", "http://localhost:8080/members");
+    //const URL = 'http://localhost:8080/members'
+    const URL = sessionStorage.getItem("URL")
 
     function setUpHandlers() {
         document.getElementById("create-member").onclick = makeNewUser
@@ -111,8 +112,8 @@
                 method: "DELETE",
                 headers: {'Accept': 'application/json'}
             }
-            fetch(URL+"/"+idToDelete,options)
-                .then(x=>{
+            fetch(URL + "/" + idToDelete, options)
+                .then(x => {
                     cache.deleteOne(idToDelete)
                     fetchUsers()
                 })
@@ -145,10 +146,9 @@
         document.getElementById("modal-title").innerText = user.id ? "Edit User" : "Add User"
         document.getElementById("member-id").innerText = user.id
         document.getElementById("member-name").value = user.name
-        if(user.id===null){
+        if (user.id === null) {
             document.getElementById("member-birthday").value = user.birthday
-        }
-        else{
+        } else {
             document.getElementById("member-birthday").value = user.birthday.split("T")[0]
         }
         document.getElementById("member-phone").value = user.phoneNr
@@ -186,16 +186,16 @@
             body: JSON.stringify(user)
         }
         fetch(url, options)
-            .then(member=> {
+            .then(member => {
                 console.log("Yes den er god")
-                cache.addEdit(member,method)
+                cache.addEdit(member, method)
                 fetchUsers()
                 document.getElementById("myModal").style.display = "none";
             })
             .catch(e => alert(e))
     }
 
-    function deleteUser(){
+    function deleteUser() {
         evt.preventDefault()
         evt.stopPropagation()
         const target = evt.target
@@ -224,7 +224,7 @@
                 fetchUsers()
             })
             .catch(e => alert(e))
-            fetchUsers()
+        fetchUsers()
     }
 
     function fetchUsers() {
