@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/styles/standardStyle.css}" rel="stylesheet">
+    <link th:href="@{/styles/matchRegistration.css}" rel="stylesheet">
+<head/>
+<body>
+
+
+<div id="myModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h5 id="modal-title"></h5>
+        <section class="form-box">
+            <form class="create-user">
+                <p hidden>User ID: <span id="member-id"></span></p>
+                <div class="input-line">
+                    <label for="member-winner">Winner</label><br>
+                    <input type="text" id="member-winner" name="member-name" placeholder="Winners member id" required><br>
+                </div>
+                <div class="input-line">
+                    <label for="game-type">Loser</label><br>
+                    <input type="text" id="game-type" name="game-type" placeholder="Losers member id"
+                    required><br>
+                </div>
+                <div class="input-line">
+                    <label for="match-date">Match date</label><br>
+                    <input type="date" id="match-date" name="match-date"><br>
+                </div>
+                <div class="input-dropdown">
+                    <form action="/action_page.php">
+                    <label for="match-type">Choose match type</label><br>
+
+                    <select id="match-type" name="match-type">
+                        <option value="tournament">Tournament</option>
+                        <option value="match">Match</option>
+                    </select>
+                    </form>
+                </div>
+            </form>
+        </section>
+        <div class="modal-footer">
+            <button id="btn-save" type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
