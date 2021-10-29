@@ -33,8 +33,8 @@ public class CashierController {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<Member> updateMemberInformation(@RequestBody Member updatedMember){
+        System.out.println(updatedMember.getRank());
         memberService.updateMember(updatedMember);
-
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 

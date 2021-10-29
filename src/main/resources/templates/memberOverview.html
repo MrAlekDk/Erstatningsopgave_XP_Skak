@@ -42,6 +42,7 @@
         <section class="form-box">
             <form class="create-user">
                 <p hidden>User ID: <span id="member-id"></span></p>
+                <p hidden>User Rank: <span id="member-rank"></span></p>
                 <div class="input-line">
                     <label for="member-name">Name of member</label><br>
                     <input type="text" id="member-name" name="member-name" placeholder="Member name here" required><br>
@@ -124,7 +125,6 @@
             showModal(user)
         }
 
-        console.log(target.dataset.idPay)
         if(target.dataset.idPay){
             const idToDelete = Number(target.dataset.idDelete)
             const options = {
@@ -167,6 +167,7 @@
         }
         document.getElementById("member-phone").value = user.phoneNr
         document.getElementById("member-email").value = user.email
+        document.getElementById("member-rank").value = user.rank
 
         modal.style.display = "block";
 
@@ -188,6 +189,7 @@
         user.birthday = document.getElementById("member-birthday").value
         user.phoneNr = document.getElementById("member-phone").value
         user.email = document.getElementById("member-email").value
+        user.rank = document.getElementById("member-rank").value
 
         const method = user.id ? "PUT" : "POST"
         const url = (method === "PUT") ? URL + "/" + user.id : URL
@@ -201,7 +203,6 @@
         }
         fetch(url, options)
             .then(member=> {
-                console.log("Yes den er god")
                 cache.addEdit(member,method)
                 fetchUsers()
                 document.getElementById("myModal").style.display = "none";
@@ -265,6 +266,7 @@
             <td>${member.email}</td>
             <td>${member.rank}</td>
             <td>${calculatePayment(member.member_payment.lastPaymentDate)}</td>
+            <td hidden data-id-rank="${member.rank}"></td>
             <td><Button data-id-edit=${member.id}>Edit member</Button></td>
             <td><Button data-id-delete=${member.id}>Delete member</Button></td>
             <td>${payButton}</td>
