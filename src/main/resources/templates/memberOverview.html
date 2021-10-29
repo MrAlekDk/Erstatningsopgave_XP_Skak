@@ -91,7 +91,9 @@
         }
     }
 
-    const URL = 'http://localhost:8080/members'
+    sessionStorage.setItem("URL", "http://localhost:8080/members");
+    //const URL = 'http://localhost:8080/members'
+    const URL = sessionStorage.getItem("URL")
 
     function setUpHandlers() {
         document.getElementById("create-member").onclick = makeNewUser
@@ -112,8 +114,8 @@
                 method: "DELETE",
                 headers: {'Accept': 'application/json'}
             }
-            fetch(URL+"/"+idToDelete,options)
-                .then(x=>{
+            fetch(URL + "/" + idToDelete, options)
+                .then(x => {
                     cache.deleteOne(idToDelete)
                     fetchUsers()
                 })
