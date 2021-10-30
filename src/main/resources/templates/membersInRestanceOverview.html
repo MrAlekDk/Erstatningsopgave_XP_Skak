@@ -1,3 +1,4 @@
+<html>
 <head xmlns:th="http://www.w3.org/1999/xhtml">
     <meta charset="UTF-8">
     <link th:href="@{/styles/standardStyle.css}" rel="stylesheet">
@@ -14,8 +15,10 @@
         <th>Birthday</th>
         <th>Phone number</th>
         <th>Email</th>
-        <th>Payed</th>
+        <th>Category</th>
+        <th>Days since paydeadline</th>
         <th>Pay amount</th>
+        <th></th>
     </tr>
     </thead>
     <tbody class="table-body" id="t-body">
@@ -27,42 +30,6 @@
     </tr> -->
     </tbody>
 </table>
-
-<!-- The Modal -->
-<div id="myModal" class="modal">
-    <!-- Modal content -->
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <h5 id="modal-title"></h5>
-        <section class="form-box">
-            <form class="create-user">
-                <p hidden>User ID: <span id="member-id"></span></p>
-                <div class="input-line">
-                    <label for="member-name">Name of member</label><br>
-                    <input type="text" id="member-name" name="member-name" placeholder="Member name here" required><br>
-                </div>
-                <div class="input-line">
-                    <label for="member-Birthday">Birtday of member</label><br>
-                    <input type="date" id="member-birthday" name="member-birthday"><br>
-                </div>
-                <div class="input-line">
-                    <label for="member-phone">Number of member</label><br>
-                    <input type="text" id="member-phone" name="member-phone" placeholder="Enter phonenumber here"
-                           maxlength="8" minlength="8" required><br>
-                </div>
-                <div class="input-line">
-                    <label for="member-email">Email of member</label><br>
-                    <input type="email" id="member-email" name="member-email" placeholder="Enter email here"
-                           required><br>
-                </div>
-            </form>
-        </section>
-        <div class="modal-footer">
-            <button id="btn-save" type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
-        </div>
-    </div>
-</div>
-<button id="create-member" class="btn-new-member">Create new user</button>
 </body>
 </html>
 <script>
@@ -88,7 +55,7 @@
     const URL = 'http://localhost:8080/members'
 
     function setUpHandlers() {
-        document.getElementById("create-member").onclick = handleTableClick
+        document.getElementById("t-body").onclick = handleTableClick
     }
     setUpHandlers()
 
@@ -156,29 +123,24 @@
 
     function buildRows() {
         const members = cache.getAll()
-        const rows = members.map(member => {
-            let payButton=''
-
-            if(calculatePayment(member.member_payment.lastPaymentDate)==="Not payed"){
-                payButton = "<Button data-id-pay="+ member.id+ ">Pay "+calculateAmount(member.birthday)+"</Button>"
-            }
+        let membersFiltered = members.filter(member => calculatePayment(member.member_payment.lastPaymentDate))
+        const rows = membersFiltered.map(member => {
             return `<tr class="member-box">
             <td>${member.name}</td>
             <td>${dateFormatter(member.birthday)}</td>
             <td>${member.phoneNr}</td>
             <td>${member.email}</td>
-            <td>${calculatePayment(member.member_payment.lastPaymentDate)}</td>
-            <td>${payButton}</td>
+            <td>Senior</td>
+            <td>${calculateDaysSinceDeadline(member.member_payment.lastPaymentDate)}</td>
+            <td>${calculateAmount(member.birthday, member.member_payment.lastPaymentDate)}</td>
+            <td><Button data-id-pay=${member.id}>Pay now</Button></td>
         </tr>`;
         })
         document.getElementById("t-body").innerHTML = rows.join("")
     }
 
-
     function calculatePayment(lastPaymentDate){
         let lastPayedDate = new Date(lastPaymentDate)
-        //let todayDate = new Date()
-        let src=""
         let oldDate = lastPayedDate,
             todayDate = new Date(),
             y1= oldDate.getFullYear(),
@@ -186,15 +148,8 @@
             d1= new Date(oldDate).setFullYear(2000),
             d2= new Date(todayDate).setFullYear(2000);
 
-        result = !(y2 - y1 > 1 || (y2 - y1 == 1 && d2 > d1))
-
-        if(result){
-            src = "Payed"
-        }
-        else{
-            src ="Not payed"
-        }
-        return src;
+        result = (y2 - y1 > 1 || (y2 - y1 == 1 && d2 > d1))
+        return result;
     }
 
     function dateFormatter(a) {
@@ -203,8 +158,22 @@
         return d[3] + " " + d[1] + " " + d[2]
     }
 
-    function calculateAmount(birthday){
-        let rykkerGebyr = 500;
+    function calculateDaysSinceDeadline(lastPaymentDate){
+        let date1 = new Date(lastPaymentDate)
+        let date2 = new Date()
+
+        let difference = date2.getTime() - date1.getTime()
+        let days = Math.ceil(difference / (1000*3600*24))
+        return days
+    }
+
+
+    function calculateAmount(birthday, lastPaymentDate){
+        days = calculateDaysSinceDeadline(lastPaymentDate)
+        let rykkerGebyr = 0
+        if(days>10){
+            rykkerGebyr = 500
+        }
         birthd = new Date(birthday)
         let ageDifMs = Date.now() - birthd
         let ageDate = new Date(ageDifMs); // miliseconds from epoch
@@ -218,7 +187,5 @@
         if(age>59){
             return 450 + rykkerGebyr
         }
-
     }
-
 </script>

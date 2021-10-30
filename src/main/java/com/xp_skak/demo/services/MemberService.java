@@ -34,8 +34,6 @@ public class MemberService {
     }
 
     public void deleteMemberById(Long id) {
-
-
         memberRep.deleteById(id);
     }
 
@@ -57,4 +55,5 @@ public class MemberService {
         tmp.setLastPaymentDate(new Date());
         paymentRepository.save(tmp);
     }
+
 }

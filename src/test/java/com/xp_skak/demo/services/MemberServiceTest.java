@@ -1,7 +1,9 @@
 package com.xp_skak.demo.services;
 
 import com.xp_skak.demo.models.Member;
+import com.xp_skak.demo.models.Payment;
 import com.xp_skak.demo.repositories.MembersRepository;
+import com.xp_skak.demo.repositories.PaymentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -22,6 +24,8 @@ class MemberServiceTest {
 
     @Mock
     MembersRepository memberRep;
+    @Mock
+    PaymentRepository paymentRep;
 
     @InjectMocks
     MemberService memberService;
@@ -35,6 +39,8 @@ class MemberServiceTest {
         Member memberTest3 = new Member("Bent", new Date(), "42424242", "email@gmail.com");
         Member memberTest4 = new Member("Kurt", new Date(), "42424242", "email@gmail.com");
 
+        Payment paymentTest = new Payment(Long.valueOf(1));
+
         List<Member> testList = new ArrayList<>();
         testList.add(memberTest);
         testList.add(memberTest2);
@@ -43,7 +49,12 @@ class MemberServiceTest {
 
         Mockito.when(memberRep.findById(Long.valueOf(1))).thenReturn(java.util.Optional.of(memberTest));
 
+        Mockito.when(memberRep.save(memberTest)).thenReturn(memberTest);
+
         Mockito.when(memberRep.findAll()).thenReturn(testList);
+
+        Mockito.when(paymentRep.findById(Long.valueOf(1))).thenReturn(java.util.Optional.of(paymentTest));
+        Mockito.when(paymentRep.save(paymentTest)).thenReturn(paymentTest);
 
 
     }
@@ -96,7 +107,6 @@ class MemberServiceTest {
 
         Member test = new Member("Alek", new Date(), "10101010", "email@c.com");
 
-        Mockito.when(memberRep.findById(test.getId())).thenReturn(Optional.of(test));
         memberService.deleteMemberById(test.getId());
 
         Mockito.verify(memberRep).deleteById(test.getId());
@@ -105,9 +115,12 @@ class MemberServiceTest {
     @Test
     void registerPaymentTest(){
         Long id = Long.valueOf(1);
+        Payment testPayment = new Payment(id);
 
         memberService.registerPayment(id);
 
-        //Mockito.verify(memberRep, times(1)).save(memberToUpdate);
+        Mockito.verify(paymentRep, times(1)).findById(id);
+        //Mockito.verify(paymentRep, times(1)).save(testPayment);
     }
+
 }
