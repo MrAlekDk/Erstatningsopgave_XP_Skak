@@ -1,8 +1,10 @@
 package com.xp_skak.demo.services;
 
 
+import com.xp_skak.demo.models.Match;
 import com.xp_skak.demo.models.Member;
 import com.xp_skak.demo.models.Payment;
+import com.xp_skak.demo.repositories.MatchRepository;
 import com.xp_skak.demo.repositories.MembersRepository;
 import com.xp_skak.demo.repositories.PaymentRepository;
 import org.springframework.stereotype.Service;
@@ -10,15 +12,17 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MemberService {
 
     MembersRepository memberRep;
     PaymentRepository paymentRepository;
+    MatchRepository matchRepository;
 
 
-    public MemberService(MembersRepository memberRep, PaymentRepository paymentRep){
+    public MemberService(MembersRepository memberRep, PaymentRepository paymentRep) {
         this.memberRep = memberRep;
         this.paymentRepository = paymentRep;
     }
@@ -56,5 +60,17 @@ public class MemberService {
         Payment tmp = paymentRepository.findById(id).get();
         tmp.setLastPaymentDate(new Date());
         paymentRepository.save(tmp);
+    }
+
+    public void saveMatch(Match match) {
+        matchRepository.save(match);
+    }
+
+    public void updateRank(Member winner, Member loser) {
+//        Optional<Member> winningMember = memberRep.findById(winner.getId());
+//        Optional<Member> losingMember = memberRep.findById(loser.getId());
+
+        memberRep.save(winner);
+        memberRep.save(loser);
     }
 }
