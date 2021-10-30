@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "match_history")
-public class MatchHistory {
+public class Match {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,4 +28,45 @@ public class MatchHistory {
 
     @Column(name = "game_type", nullable = false)
     private String gameType;
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Member getWinnerMember() {
+        return winnerMember;
+    }
+
+    public void setWinnerMember(Member winnerMember) {
+        this.winnerMember = winnerMember;
+    }
+
+    public Member getLoserMember() {
+        return loserMember;
+    }
+
+    public void setLoserMember(Member loserMember) {
+        this.loserMember = loserMember;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    public String getGameType() {
+        return gameType;
+    }
+
+    public void setGameType(String gameType) {
+        this.gameType = gameType;
+    }
 }

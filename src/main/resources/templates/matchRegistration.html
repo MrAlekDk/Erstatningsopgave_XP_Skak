@@ -25,45 +25,47 @@
     </tbody>
 </table>
 
-<div class="input-line">
-    <!--                  <label for="member-winner">Winner</label><br>
-                      <input type="text" id="member-winner" name="member-name" placeholder="Winners member id"
-                             required><br>
-  -->
-    <select name="member-winner" id="member-winner" required></select>
-</div>
+<section class="form-box">
+    <form class="register-match">
+
+        <div class="input-line">
+            <label for="member-winner">Winner</label><br>
+            <input type="text" id="member-winner" name="member-winner" placeholder="Winners member id"
+                   required><br>
+            <!--    <select name="member-winner" id="member-winner" required></select>
+            -->
+        </div>
+
+        <div class="input-line">
+            <label for="member-loser">Loser</label><br>
+            <input type="text" id="member-loser" name="member-loser" placeholder="Losers member id"
+                   required><br>
+        </div>
+
+        <div class="input-line">
+            <label for="match-date">Match date</label><br>
+            <input type="date" id="match-date" name="match-date"><br>
+        </div>
+    </form>
+    <div class="input-dropdown">
+        <form>
+            <label for="match-type">Choose match type</label><br>
+            <select id="match-type" name="match-type">
+                <option value="tournament">Tournament</option>
+                <option value="match">Match</option>
+            </select>
+        </form>
+    </div>
+</section>
 
 <div id="myModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
         <span class="close">&times;</span>
         <h5 id="modal-title"></h5>
-        <section class="form-box">
-            <form class="create-user">
-                <p>User ID: <span id="member-id"></span></p>
 
-                <div class="input-line">
-                    <label for="game-type">Loser</label><br>
-                    <input type="text" id="game-type" name="game-type" placeholder="Losers member id"
-                           required><br>
-                </div>
-                <div class="input-line">
-                    <label for="match-date">Match date</label><br>
-                    <input type="date" id="match-date" name="match-date"><br>
-                </div>
-            </form>
-            <div class="input-dropdown">
-                <form>
-                    <label for="match-type">Choose match type</label><br>
-                    <select id="match-type" name="match-type">
-                        <option value="tournament">Tournament</option>
-                        <option value="match">Match</option>
-                    </select>
-                </form>
-            </div>
-        </section>
         <div class="modal-footer">
-            <button id="btn-save" type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+            <button onclick="saveMatch()" id="btn-save" type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
         </div>
     </div>
 </div>
@@ -101,8 +103,8 @@
     const URL = sessionStorage.getItem("URL")
 
     function setUpHandlers() {
-        document.getElementById("btn-save").onclick = updateRank;
-        document.getElementById("btn-register-match").onclick = handleTableClick
+        //document.getElementById("btn-save").onclick = updateRank;
+        //document.getElementById("btn-register-match").onclick = saveMatch()
     }
 
     setUpHandlers()
@@ -152,15 +154,39 @@
         }
     }
 
+    function saveMatch() {
+        const match = {}
+        match.winnerMember = document.getElementById("member-winner").innerText
+        match.loserMember = document.getElementById("member-loser").innerText
+        match.gameType = document.getElementById("game-type").value
+
+        const method = "POST"
+
+        const options = {
+            method: method,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(match)
+        }
+
+        fetch(options)
+            .then(response => response.json())
+            .then(data => console.log(data));
+    }
+
     function updateRank(winner, loser) {
         let gameType;
 
         const modal = document.getElementById("myModal");
         let span = document.getElementsByClassName("close")[0];
         //document.getElementById("modal-title").innerText = user.id ? "Edit User" : "Add User"
-        document.getElementById("member-winner").innerText = winner.get(0).selectedIndex
+        document.getElementById("member-winner").innerText = winner.id
         document.getElementById("member-loser").innerText = loser.id
         document.getElementById("game-type").value = gameType;
+
+        const method = "PUT"
     }
 
     function fetchUsers1() {
@@ -174,11 +200,6 @@
                 document.getElementById("member-winner").innerHTML = options;
             })
     }
-    fetchUsers1()
-
-
-
-
 
     function showModal() {
 
@@ -200,7 +221,7 @@
             }
         }
 
-        btn-save
+        btn - save
     }
 
 </script>
