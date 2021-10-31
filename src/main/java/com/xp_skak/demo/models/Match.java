@@ -14,12 +14,12 @@ public class Match {
     private Long id;
 
     //TODO er det korrekt?
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "winner_member_id", referencedColumnName = "id", nullable = false)
     private Member winnerMember;
 
     //TODO er det korrekt?
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "loser_member_id", referencedColumnName = "id", nullable = false)
     private Member loserMember;
 

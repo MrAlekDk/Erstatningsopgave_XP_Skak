@@ -22,9 +22,10 @@ public class MemberService {
     MatchRepository matchRepository;
 
 
-    public MemberService(MembersRepository memberRep, PaymentRepository paymentRep) {
+    public MemberService(MembersRepository memberRep, PaymentRepository paymentRep, MatchRepository matchrep) {
         this.memberRep = memberRep;
         this.paymentRepository = paymentRep;
+        this.matchRepository = matchrep;
     }
 
     public List<Member> getAllMembers() {
@@ -38,8 +39,6 @@ public class MemberService {
     }
 
     public void deleteMemberById(Long id) {
-
-
         memberRep.deleteById(id);
     }
 
@@ -72,5 +71,11 @@ public class MemberService {
 
         memberRep.save(winner);
         memberRep.save(loser);
+    }
+
+    public List<Match> getAllMatches() {
+        List<Match> allMatches = new ArrayList<>();
+        matchRepository.findAll().forEach(allMatches::add);
+        return allMatches;
     }
 }

@@ -155,9 +155,9 @@
 
     function saveMatch() {
         const match = {}
-        match.winnerMember = document.getElementById("member-winner").innerText
-        match.loserMember = document.getElementById("member-loser").innerText
-        match.gameType = document.getElementById("match-type").value
+        match.winnerMember = cache.findById(document.getElementById("member-winner").value)
+        match.loserMember = cache.findById(document.getElementById("member-loser").value)
+        match.gameType = document.getElementById("match-type").innerText
 
         const method = "POST"
         const options = {
