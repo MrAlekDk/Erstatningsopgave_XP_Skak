@@ -15,3 +15,8 @@ VALUES
 (103,'2020-10-25'),
 (104,'2020-10-29'),
 (105,'2020-10-25');
+
+INSERT INTO tournaments(id,name,price,date)
+VALUES
+(400,'Ringkøbing skaktournering',1200,'2022-01-24'),
+(401,'Roskilde skakprix',50000,'2022-06-24');

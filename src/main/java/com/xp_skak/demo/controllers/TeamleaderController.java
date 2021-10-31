@@ -42,11 +42,14 @@ public class TeamleaderController {
     @GetMapping
     @RequestMapping(value = "/tournaments")
     public ResponseEntity<List<Tournament>> getAllTournaments(){
-        List<Match> allTournaments = matchService.getAllMatches();
+        List<Tournament> allTournaments = matchService.getAllTournaments();
         return ResponseEntity.status(HttpStatus.OK).body(allTournaments);
     }
 
     @PostMapping
     @RequestMapping
-    public ResponseEntity<Tournament>
+    public ResponseEntity<Tournament> createNewTournament(@RequestBody Tournament newTournament){
+        matchService.saveNewTournament(newTournament);
+        return ResponseEntity.status(HttpStatus.OK).body(newTournament);
+    }
 }

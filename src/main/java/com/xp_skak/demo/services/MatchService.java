@@ -1,7 +1,9 @@
 package com.xp_skak.demo.services;
 
 import com.xp_skak.demo.models.Match;
+import com.xp_skak.demo.models.Tournament;
 import com.xp_skak.demo.repositories.MatchRepository;
+import com.xp_skak.demo.repositories.TournamentRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,6 +13,12 @@ import java.util.List;
 public class MatchService {
 
     MatchRepository matchRepository;
+    TournamentRepository tournamentRepository;
+
+    public MatchService(MatchRepository matchRepository, TournamentRepository tournamentRepository){
+        this.matchRepository=matchRepository;
+        this.tournamentRepository=tournamentRepository;
+    }
 
     public List<Match> getAllMatches() {
         List<Match> allMatches = new ArrayList<>();
@@ -23,4 +31,13 @@ public class MatchService {
     }
 
 
+    public List<Tournament> getAllTournaments() {
+        List<Tournament> allTournaments = new ArrayList<>();
+        tournamentRepository.findAll().forEach(allTournaments::add);
+        return allTournaments;
+    }
+
+    public void saveNewTournament(Tournament Newtournament) {
+        tournamentRepository.save(Newtournament);
+    }
 }
