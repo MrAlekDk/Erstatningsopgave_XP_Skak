@@ -164,7 +164,7 @@
 
         let difference = date2.getTime() - date1.getTime()
         let days = Math.ceil(difference / (1000*3600*24))
-        return days
+        return days-365
     }
 
     function calculateCategory(birthday){

@@ -120,6 +120,7 @@ class MemberServiceTest {
         memberService.registerPayment(id);
 
         Mockito.verify(paymentRep, times(1)).findById(id);
+        assertEquals(new Date(),testPayment.getLastPaymentDate());
         //Mockito.verify(paymentRep, times(1)).save(testPayment);
     }
 
