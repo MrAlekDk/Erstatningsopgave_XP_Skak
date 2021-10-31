@@ -61,10 +61,6 @@ public class MemberService {
         paymentRepository.save(tmp);
     }
 
-    public void saveMatch(Match match) {
-        matchRepository.save(match);
-    }
-
     public void updateRank(Member winner, Member loser) {
 //        Optional<Member> winningMember = memberRep.findById(winner.getId());
 //        Optional<Member> losingMember = memberRep.findById(loser.getId());
@@ -78,9 +74,4 @@ public class MemberService {
         memberRep.save(loser);
     }
 
-    public List<Match> getAllMatches() {
-        List<Match> allMatches = new ArrayList<>();
-        matchRepository.findAll().forEach(allMatches::add);
-        return allMatches;
-    }
 }
