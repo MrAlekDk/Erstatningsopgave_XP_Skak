@@ -12,6 +12,7 @@
         <thead>
         <tr>
             <td>Id</td>
+            <td>Team</td>
             <th>Name</th>
             <th>Rank</th>
         </tr>
@@ -19,6 +20,7 @@
         <tbody class="table-body" id="t-body">
         <tr>
             <td>113</td>
+            <td>Holdet</td>
             <td>Alexander</td>
             <td>13</td>
         </tr>
@@ -69,7 +71,7 @@
         <form>
             <label for="match-type">Choose match type</label><br>
             <select id="match-type" name="match-type">
-                <option value="match">Match</option>
+                <option value="match" selected>Match</option>
                 <option value="tournament">Tournament</option>
             </select>
         </form>
@@ -120,10 +122,14 @@
         }
     }
 
-    function getToday() {
-        let date;
+    function setDateToday() {
+        let date = new Date();
+        let currentDate = date.toISOString().substring(0,10);
 
+        document.getElementById('match-date').value = currentDate;
     }
+
+    setDateToday()
 
     //TODO Implementer @BeforeAll metode
     sessionStorage.setItem("URL", "http://localhost:8080");
@@ -137,8 +143,8 @@
     setUpHandlers()
 
     const cache = localCache();
-    fetchMatches()
     fetchUsers()
+    fetchMatches()
 
     function fetchUsers() {
         fetch(URL + "/members")
@@ -154,6 +160,7 @@
         const rows = members.map(member => {
             return `<tr class="member-box">
             <td>${member.id}</td>
+            <td>${member.team.name}</td>
             <td>${member.name}</td>
             <td>${member.rank}</td>
         </tr>`;
@@ -186,7 +193,6 @@
         evt.preventDefault()
         evt.stopPropagation()
         const target = evt.target;
-        console.log("handleTableClick")
         //Observe change compared to video
 
         //showModal()
@@ -194,10 +200,6 @@
             const idToEdit = Number(target.dataset.idEdit)
             const loser = cache.findById(idToEdit)
             const winner = cache.findById(idToEdit)
-
-            console.log(idToEdit)
-            console.log(loser)
-            console.log(winner)
         }
     }
 
@@ -208,6 +210,12 @@
         match.loserMember = cache.findById(document.getElementById("member-loser").value)
         match.gameType = document.getElementById("match-type").innerText
 
+        let gameType = document.getElementById("match-type")
+        let selectedGameType = gameType.options[gameType.selectedIndex].value;
+
+        console.log("selected Game Type" + selectedGameType)
+
+        //match.matchDate = document.getElementById("match-date").value
 //        let e = document.getElementById("game-type")
 //        match.gameType = e.options[e.selectedIndex].value;
 
@@ -224,7 +232,6 @@
         fetch(URL + "/matches", options)
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 fetchUsers()
                 fetchMatches()
             })
