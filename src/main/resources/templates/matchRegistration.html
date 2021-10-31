@@ -65,7 +65,9 @@
         <h5 id="modal-title"></h5>
 
         <div class="modal-footer">
-            <button onclick="saveMatch()" id="btn-save" type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+            <button onclick="saveMatch()" id="btn-save" type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                Save changes
+            </button>
         </div>
     </div>
 </div>
@@ -100,6 +102,8 @@
         }
     }
 
+    //TODO Implementer @BeforeAll metode
+    sessionStorage.setItem("URL", "http://localhost:8080");
     const URL = sessionStorage.getItem("URL")
 
     function setUpHandlers() {
@@ -108,7 +112,6 @@
     }
 
     setUpHandlers()
-
 
     const cache = localCache();
     fetchUsers()
@@ -159,6 +162,9 @@
         match.loserMember = cache.findById(document.getElementById("member-loser").value)
         match.gameType = document.getElementById("match-type").innerText
 
+//        let e = document.getElementById("game-type")
+//        match.gameType = e.options[e.selectedIndex].value;
+
         const method = "POST"
         const options = {
             method: method,
@@ -169,12 +175,12 @@
             body: JSON.stringify(match)
         }
 
-        fetch(URL +"/matches",options)
+        fetch(URL + "/matches", options)
             .then(response => response.json())
             .then(data => {
                 console.log(data)
                 fetchUsers()
-                })
+            })
     }
 
     function updateRank(winner, loser) {

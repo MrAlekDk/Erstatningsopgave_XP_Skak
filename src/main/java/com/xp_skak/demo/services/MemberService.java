@@ -68,6 +68,11 @@ public class MemberService {
     public void updateRank(Member winner, Member loser) {
 //        Optional<Member> winningMember = memberRep.findById(winner.getId());
 //        Optional<Member> losingMember = memberRep.findById(loser.getId());
+        int loserPoint = 3;
+        int winnerPoint = 3;
+
+        winner.setRank(winner.getRank()+winnerPoint);
+        loser.setRank(loser.getRank()-loserPoint);
 
         memberRep.save(winner);
         memberRep.save(loser);

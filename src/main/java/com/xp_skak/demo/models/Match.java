@@ -23,9 +23,6 @@ public class Match {
     @JoinColumn(name = "loser_member_id", referencedColumnName = "id", nullable = false)
     private Member loserMember;
 
-    @Column(name = "points", nullable = false)
-    private int points = 10;
-
     @Column(name = "game_type", nullable = false)
     private String gameType;
 
@@ -52,14 +49,6 @@ public class Match {
 
     public void setLoserMember(Member loserMember) {
         this.loserMember = loserMember;
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
     }
 
     public String getGameType() {
