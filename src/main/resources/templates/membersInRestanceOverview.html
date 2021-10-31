@@ -130,7 +130,7 @@
             <td>${dateFormatter(member.birthday)}</td>
             <td>${member.phoneNr}</td>
             <td>${member.email}</td>
-            <td>Senior</td>
+            <td>${calculateCategory(member.birthday)}</td>
             <td>${calculateDaysSinceDeadline(member.member_payment.lastPaymentDate)}</td>
             <td>${calculateAmount(member.birthday, member.member_payment.lastPaymentDate)}</td>
             <td><Button data-id-pay=${member.id}>Pay now</Button></td>
@@ -165,6 +165,22 @@
         let difference = date2.getTime() - date1.getTime()
         let days = Math.ceil(difference / (1000*3600*24))
         return days
+    }
+
+    function calculateCategory(birthday){
+        birthd = new Date(birthday)
+        let ageDifMs = Date.now() - birthd
+        let ageDate = new Date(ageDifMs); // miliseconds from epoch
+        let age = Math.abs(ageDate.getUTCFullYear() - 1970);
+        if(age<18){
+            return "Junior"
+        }
+        if(age>17 && age<60){
+            return "Adult"
+        }
+        if(age>59){
+            return "Senior"
+        }
     }
 
 

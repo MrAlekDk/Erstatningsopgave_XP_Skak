@@ -20,7 +20,6 @@
         <th>Payed</th>
         <th></th>
         <th></th>
-        <th></th>
     </tr>
     </thead>
     <tbody class="table-body" id="t-body">
@@ -256,11 +255,6 @@
     function buildRows() {
         const members = cache.getAll()
         const rows = members.map(member => {
-            let payButton=''
-
-            if(calculatePayment(member.member_payment.lastPaymentDate)==="Not payed"){
-                payButton = "<Button data-id-pay="+ member.id+ ">Pay "+calculateAmount(member.birthday)+"</Button>"
-            }
             return `<tr class="member-box">
             <td>${member.name}</td>
             <td>${dateFormatter(member.birthday)}</td>
@@ -271,7 +265,6 @@
             <td hidden data-id-rank="${member.rank}"></td>
             <td><Button data-id-edit=${member.id}>Edit member</Button></td>
             <td><Button data-id-delete=${member.id}>Delete member</Button></td>
-            <td>${payButton}</td>
         </tr>`;
         })
         document.getElementById("t-body").innerHTML = rows.join("")
@@ -305,22 +298,4 @@
         d = tmpDate.split(" ")
         return d[3] + " " + d[1] + " " + d[2]
     }
-
-    function calculateAmount(birthday){
-        birthd = new Date(birthday)
-        let ageDifMs = Date.now() - birthd
-        let ageDate = new Date(ageDifMs); // miliseconds from epoch
-        let age = Math.abs(ageDate.getUTCFullYear() - 1970);
-        if(age<18){
-            return 250
-        }
-        if(age>17 && age<60){
-            return 650
-        }
-        if(age>59){
-            return 450
-        }
-
-    }
-
 </script>
