@@ -104,7 +104,7 @@
 
     function setUpHandlers() {
         //document.getElementById("btn-save").onclick = updateRank;
-        //document.getElementById("btn-register-match").onclick = saveMatch()
+        document.getElementById("btn-register-match").onclick = saveMatch
     }
 
     setUpHandlers()
@@ -114,7 +114,7 @@
     fetchUsers()
 
     function fetchUsers() {
-        fetch(URL)
+        fetch(URL + "/members")
             .then(response => response.json())
             .then(data => {
                 cache.addAll(data)
@@ -142,7 +142,6 @@
         //Observe change compared to video
 
         //showModal()
-
         if (target.dataset.idEdit) {
             const idToEdit = Number(target.dataset.idEdit)
             const loser = cache.findById(idToEdit)
@@ -158,10 +157,9 @@
         const match = {}
         match.winnerMember = document.getElementById("member-winner").innerText
         match.loserMember = document.getElementById("member-loser").innerText
-        match.gameType = document.getElementById("game-type").value
+        match.gameType = document.getElementById("match-type").value
 
         const method = "POST"
-
         const options = {
             method: method,
             headers: {
@@ -171,9 +169,12 @@
             body: JSON.stringify(match)
         }
 
-        fetch(options)
+        fetch(URL +"/matches",options)
             .then(response => response.json())
-            .then(data => console.log(data));
+            .then(data => {
+                console.log(data)
+                fetchUsers()
+                })
     }
 
     function updateRank(winner, loser) {
@@ -190,7 +191,7 @@
     }
 
     function fetchUsers1() {
-        fetch(URL)
+        fetch(URL + "/match")
             .then(response => response.json())
             .then(data => {
                 let options = "";
@@ -202,8 +203,6 @@
     }
 
     function showModal() {
-
-
         let gameType;
         const modal = document.getElementById("myModal");
         let span = document.getElementsByClassName("close")[0];

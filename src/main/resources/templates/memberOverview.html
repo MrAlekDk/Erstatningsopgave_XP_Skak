@@ -90,7 +90,7 @@
         }
     }
 
-    sessionStorage.setItem("URL", "http://localhost:8080/members");
+    sessionStorage.setItem("URL", "http://localhost:8080");
     //const URL = 'http://localhost:8080/members'
     const URL = sessionStorage.getItem("URL")
 
@@ -113,7 +113,7 @@
                 method: "DELETE",
                 headers: {'Accept': 'application/json'}
             }
-            fetch(URL + "/" + idToDelete, options)
+            fetch(URL +"/members" + "/" + idToDelete, options)
                 .then(x => {
                     cache.deleteOne(idToDelete)
                     fetchUsers()
@@ -133,7 +133,7 @@
                 headers: {'Accept': 'application/json'}
             }
             const idToPay = Number(target.dataset.idPay)
-            fetch(URL+"/payments/"+idToPay,options)
+            fetch(URL+"/members"+"/payments/"+idToPay,options)
             .then(x=>{
                 fetchUsers()
             })
@@ -193,7 +193,7 @@
         user.rank = document.getElementById("member-rank").value
 
         const method = user.id ? "PUT" : "POST"
-        const url = (method === "PUT") ? URL + "/" + user.id : URL
+        const url = (method === "PUT") ? URL +"/members" + "/" + user.id : URL +"/members"
         const options = {
             method: method,
             headers: {
@@ -220,7 +220,7 @@
         cache.deleteOne(idToDelete)
 
         const method = "DELETE"
-        const url = URL + "/" + idToDelete
+        const url = URL +"/members" + "/" + idToDelete
         const options = {
             method: method,
             headers: {
@@ -244,7 +244,7 @@
     }
 
     function fetchUsers() {
-        fetch(URL)
+        fetch(URL+"/members")
             .then(response => response.json())
             .then(data => {
                 cache.addAll(data)
