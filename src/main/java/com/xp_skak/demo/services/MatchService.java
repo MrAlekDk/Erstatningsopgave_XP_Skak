@@ -2,10 +2,12 @@ package com.xp_skak.demo.services;
 
 import com.xp_skak.demo.models.Match;
 import com.xp_skak.demo.repositories.MatchRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class MatchService {
 
     MatchRepository matchRepository;

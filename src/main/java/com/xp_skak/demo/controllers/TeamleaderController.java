@@ -18,8 +18,9 @@ public class TeamleaderController {
     MemberService memberService;
     MatchService matchService;
 
-    public TeamleaderController(MemberService memberService){
+    public TeamleaderController(MemberService memberService, MatchService matchService){
         this.memberService = memberService;
+        this.matchService = matchService;
     }
 
     @GetMapping
