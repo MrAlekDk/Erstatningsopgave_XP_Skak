@@ -1,6 +1,8 @@
 package com.xp_skak.demo.controllers;
 
 import com.xp_skak.demo.models.Match;
+import com.xp_skak.demo.models.Member;
+import com.xp_skak.demo.models.Tournament;
 import com.xp_skak.demo.services.MatchService;
 import com.xp_skak.demo.services.MemberService;
 import org.springframework.http.HttpStatus;
@@ -39,8 +41,15 @@ public class TeamleaderController {
 
     @GetMapping
     @RequestMapping(value = "/tournaments")
-    public ResponseEntity<List<Match>> getAllTournaments(){
-        List<Match> allTournaments = matchService.getAllMatches();
+    public ResponseEntity<List<Tournament>> getAllTournaments(){
+        List<Tournament> allTournaments = matchService.getAllTournaments();
         return ResponseEntity.status(HttpStatus.OK).body(allTournaments);
+    }
+
+    @PostMapping
+    @RequestMapping
+    public ResponseEntity<Tournament> createNewTournament(@RequestBody Tournament newTournament){
+        matchService.saveNewTournament(newTournament);
+        return ResponseEntity.status(HttpStatus.OK).body(newTournament);
     }
 }

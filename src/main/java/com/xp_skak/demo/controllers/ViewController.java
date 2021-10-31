@@ -21,4 +21,9 @@ public class ViewController {
     public String getMemberInRestanceOverview(){
         return "membersInRestanceOverview.html";
     }
+
+    @GetMapping(value= "/tournaments")
+    public String getTournamentsOverview(){
+        return "tournamentOverview.html";
+    }
 }

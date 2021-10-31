@@ -11,13 +11,19 @@ VALUES (100, 'Alexander', '1998-07-13', '42772069', 'alex030t@stud.kea.dk', 10, 
        (104, 'Ingeborg', '1960-06-11', '14862954', 'ingeborgSophiesen@gmail.com', -10, 5, 2),
        (105, 'Lars', '1984-12-24', '90846101', 'LarsPedersen@gmail.com', 2, 6, 3);
 
-INSERT INTO payments(payment_id, lastpd)
-VALUES (100, '2019-10-25'),
-       (101, '2020-10-25'),
-       (102, '2021-10-25'),
-       (103, '2020-10-25'),
-       (104, '2020-10-29'),
-       (105, '2020-10-25');
+INSERT INTO payments(payment_id,lastpd)
+VALUES
+(100,'2019-10-25'),
+(101,'2020-10-25'),
+(102,'2021-10-25'),
+(103,'2020-10-25'),
+(104,'2020-10-29'),
+(105,'2020-10-25');
+
+INSERT INTO tournaments(id,name,price,date)
+VALUES
+(400,'Ringkøbing skaktournering',1200,'2022-01-24'),
+(401,'Roskilde skakprix',50000,'2022-06-24');
 
 INSERT INTO match_history (id, winner_member_id, loser_member_id, game_type)
 VALUES (100, 100, 101, 'Match'),
