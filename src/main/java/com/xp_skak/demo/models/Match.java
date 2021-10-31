@@ -1,8 +1,9 @@
 package com.xp_skak.demo.models;
 
-import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "match_history")
@@ -26,6 +27,18 @@ public class Match {
     @Column(name = "game_type", nullable = false)
     private String gameType;
 
+    @CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name ="date", columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false)
+    private Date matchDate;
+
+    public Date getMatchDate() {
+        return matchDate;
+    }
+
+    public void setMatchDate(Date matchDate) {
+        this.matchDate = matchDate;
+    }
 
     public Long getId() {
         return id;

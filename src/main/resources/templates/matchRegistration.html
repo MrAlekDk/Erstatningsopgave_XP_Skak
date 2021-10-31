@@ -7,23 +7,41 @@
     <head/>
 <body>
 
+<div>
+    <table class="members" id="members">
+        <thead>
+        <tr>
+            <td>Id</td>
+            <th>Name</th>
+            <th>Rank</th>
+        </tr>
+        </thead>
+        <tbody class="table-body" id="t-body">
+        <tr>
+            <td>113</td>
+            <td>Alexander</td>
+            <td>13</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
-<table class="members" id="members">
-    <thead>
-    <tr>
-        <td>Id</td>
-        <th>Name</th>
-        <th>Rank</th>
-    </tr>
-    </thead>
-    <tbody class="table-body" id="t-body">
-    <tr>
-        <td>113</td>
-        <td>Alexander</td>
-        <td>13</td>
-    </tr>
-    </tbody>
-</table>
+<div>
+    <table class="matches" id="matches">
+        <thead>
+        <tr>
+            <td>Winner</td>
+            <td>Loser</td>
+            <td>Date</td>
+        </tr>
+        </thead>
+        <tbody class="match-t-body" id="match-t-body">
+        <td>Asger</td>
+        <td>Alek</td>
+        <td>31/10/2021</td>
+        </tbody>
+    </table>
+</div>
 
 <section class="form-box">
     <form class="register-match">
@@ -51,8 +69,8 @@
         <form>
             <label for="match-type">Choose match type</label><br>
             <select id="match-type" name="match-type">
-                <option value="tournament">Tournament</option>
                 <option value="match">Match</option>
+                <option value="tournament">Tournament</option>
             </select>
         </form>
     </div>
@@ -102,6 +120,11 @@
         }
     }
 
+    function getToday() {
+        let date;
+
+    }
+
     //TODO Implementer @BeforeAll metode
     sessionStorage.setItem("URL", "http://localhost:8080");
     const URL = sessionStorage.getItem("URL")
@@ -114,6 +137,7 @@
     setUpHandlers()
 
     const cache = localCache();
+    fetchMatches()
     fetchUsers()
 
     function fetchUsers() {
@@ -137,6 +161,27 @@
         document.getElementById("t-body").innerHTML = rows.join("")
     }
 
+    function fetchMatches() {
+        fetch(URL + "/matches")
+            .then(response => response.json())
+            .then(data => {
+                cache.addAll(data)
+                buildMatchRows()
+            })
+    }
+
+    function buildMatchRows() {
+        const matches = cache.getAll()
+        const rows = matches.map(match => {
+            return `<tr class="member-box">
+            <td>${match.winnerMember.name}</td>
+            <td>${match.loserMember.name}</td>
+            <td>${dateFormatter(match.matchDate)}</td>
+        </tr>`;
+        })
+        document.getElementById("match-t-body").innerHTML = rows.join("")
+    }
+
     function handleTableClick(evt) {
         evt.preventDefault()
         evt.stopPropagation()
@@ -158,6 +203,7 @@
 
     function saveMatch() {
         const match = {}
+
         match.winnerMember = cache.findById(document.getElementById("member-winner").value)
         match.loserMember = cache.findById(document.getElementById("member-loser").value)
         match.gameType = document.getElementById("match-type").innerText
@@ -180,31 +226,7 @@
             .then(data => {
                 console.log(data)
                 fetchUsers()
-            })
-    }
-
-    function updateRank(winner, loser) {
-        let gameType;
-
-        const modal = document.getElementById("myModal");
-        let span = document.getElementsByClassName("close")[0];
-        //document.getElementById("modal-title").innerText = user.id ? "Edit User" : "Add User"
-        document.getElementById("member-winner").innerText = winner.id
-        document.getElementById("member-loser").innerText = loser.id
-        document.getElementById("game-type").value = gameType;
-
-        const method = "PUT"
-    }
-
-    function fetchUsers1() {
-        fetch(URL + "/match")
-            .then(response => response.json())
-            .then(data => {
-                let options = "";
-                data.forEach(function (key) {
-                    options += "<option>" + key["name"]
-                })
-                document.getElementById("member-winner").innerHTML = options;
+                fetchMatches()
             })
     }
 
@@ -227,6 +249,12 @@
         }
 
         btn - save
+    }
+
+    function dateFormatter(a) {
+        tmpDate = new Date(a.toString()).toDateString()
+        d = tmpDate.split(" ")
+        return d[3] + " " + d[1] + " " + d[2]
     }
 
 </script>

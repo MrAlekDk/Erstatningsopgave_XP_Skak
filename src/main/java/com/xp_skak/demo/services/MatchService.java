@@ -12,6 +12,10 @@ public class MatchService {
 
     MatchRepository matchRepository;
 
+    public MatchService(MatchRepository matchRepository) {
+        this.matchRepository = matchRepository;
+    }
+
     public List<Match> getAllMatches() {
         List<Match> allMatches = new ArrayList<>();
         matchRepository.findAll().forEach(allMatches::add);

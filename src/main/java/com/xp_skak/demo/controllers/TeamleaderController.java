@@ -1,7 +1,6 @@
 package com.xp_skak.demo.controllers;
 
 import com.xp_skak.demo.models.Match;
-import com.xp_skak.demo.models.Member;
 import com.xp_skak.demo.services.MatchService;
 import com.xp_skak.demo.services.MemberService;
 import org.springframework.http.HttpStatus;

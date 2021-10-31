@@ -15,3 +15,10 @@ VALUES
 (103,'2020-10-25'),
 (104,'2020-10-29'),
 (105,'2020-10-25');
+
+INSERT INTO match_history (id, winner_member_id, loser_member_id, game_type)
+VALUES
+(100, 100, 101, 'Match'),
+(101, 101, 103, 'Match'),
+(102, 103, 104, 'Match'),
+(103, 103, 105, 'Match');

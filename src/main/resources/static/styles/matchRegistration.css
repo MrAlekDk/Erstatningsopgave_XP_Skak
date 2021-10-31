@@ -107,6 +107,14 @@ h5{
     width: 85%;
 }
 
+.matches{
+    margin: 0 auto;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 85%;
+}
+
 .btn-new-member{
     align-self: center;
     justify-self: center;
