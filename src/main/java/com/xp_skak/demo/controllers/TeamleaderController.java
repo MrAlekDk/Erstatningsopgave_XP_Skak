@@ -39,6 +39,7 @@ public class TeamleaderController {
     }
 
     @GetMapping
+    @RequestMapping(value = "/tournaments")
     public ResponseEntity<List<Match>> getAllTournaments(){
         List<Match> allTournaments = matchService.getAllMatches();
         return ResponseEntity.status(HttpStatus.OK).body(allTournaments);
