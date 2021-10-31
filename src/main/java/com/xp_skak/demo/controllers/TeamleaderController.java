@@ -36,4 +36,10 @@ public class TeamleaderController {
         memberService.updateRank(match.getWinnerMember(), match.getLoserMember());
         return ResponseEntity.status(HttpStatus.OK).body(match);
     }
+
+    @GetMapping
+    public ResponseEntity<List<Match>> getAllTournaments(){
+        List<Match> allTournaments = matchService.getAllMatches();
+        return ResponseEntity.status(HttpStatus.OK).body(allTournaments);
+    }
 }
