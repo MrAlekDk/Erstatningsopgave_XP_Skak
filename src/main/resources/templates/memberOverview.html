@@ -7,7 +7,7 @@
     <title>Member overview</title>
 </head>
 <body>
-<h1>XP Skak Klub</h1>
+<h1>XP Skak klub</h1>
 
 <table class="members" id="members">
     <thead>
@@ -17,7 +17,7 @@
         <th>Phone number</th>
         <th>Email</th>
         <th>Rank</th>
-        <th>Last Payment Date</th>
+        <th>Payed</th>
         <th></th>
         <th></th>
     </tr>
@@ -41,6 +41,7 @@
         <section class="form-box">
             <form class="create-user">
                 <p hidden>User ID: <span id="member-id"></span></p>
+                <p hidden>User Rank: <span id="member-rank"></span></p>
                 <div class="input-line">
                     <label for="member-name">Name of member</label><br>
                     <input type="text" id="member-name" name="member-name" placeholder="Member name here" required><br>
@@ -70,31 +71,31 @@
 </body>
 </html>
 <script>
-    function localCache(){
+    function localCache() {
         let users = []
-        const addEdit = (user,method) =>{
-            if(method==="POST"){
+        const addEdit = (user, method) => {
+            if (method === "POST") {
                 users.push(user)
-            }
-            else if(method==="PUT") {
-                users = users.map(u => u.id == user.id ? user: u)
+            } else if (method === "PUT") {
+                users = users.map(u => u.id == user.id ? user : u)
             }
         }
         return {
-            getAll : () => users , //This is the same as above
-            addAll : (all) => users = all,
+            getAll: () => users, //This is the same as above
+            addAll: (all) => users = all,
             deleteOne: (id) => users = users.filter(u => u.id !== Number(id)),
-            findById : (id) => users.find(u => u.id == id ),
-            addEdit :addEdit
+            findById: (id) => users.find(u => u.id == id),
+            addEdit: addEdit
         }
     }
 
-    const URL = 'http://localhost:8080/members'
+    sessionStorage.setItem("URL", "http://localhost:8080");
+    //const URL = 'http://localhost:8080/members'
+    const URL = sessionStorage.getItem("URL")
 
     function setUpHandlers() {
         document.getElementById("create-member").onclick = makeNewUser
         document.getElementById("btn-save").onclick = saveUser
-        document.getElementById("t-body").onclick = handleTableClick
         document.getElementById("t-body").onclick = handleTableClick
     }
 
@@ -111,8 +112,8 @@
                 method: "DELETE",
                 headers: {'Accept': 'application/json'}
             }
-            fetch(URL+"/"+idToDelete,options)
-                .then(x=>{
+            fetch(URL + "/members" + "/" + idToDelete, options)
+                .then(x => {
                     cache.deleteOne(idToDelete)
                     fetchUsers()
                 })
@@ -124,8 +125,17 @@
             showModal(user)
         }
 
-        if (target.dataset.idUpdatePayment) {
-            console.log("Hey")
+        if (target.dataset.idPay) {
+            const idToDelete = Number(target.dataset.idDelete)
+            const options = {
+                method: "POST",
+                headers: {'Accept': 'application/json'}
+            }
+            const idToPay = Number(target.dataset.idPay)
+            fetch(URL + "/members" + "/payments/" + idToPay, options)
+                .then(x => {
+                    fetchUsers()
+                })
         }
     }
 
@@ -149,14 +159,14 @@
         document.getElementById("modal-title").innerText = user.id ? "Edit User" : "Add User"
         document.getElementById("member-id").innerText = user.id
         document.getElementById("member-name").value = user.name
-        if(user.id===null){
+        if (user.id === null) {
             document.getElementById("member-birthday").value = user.birthday
-        }
-        else{
+        } else {
             document.getElementById("member-birthday").value = user.birthday.split("T")[0]
         }
         document.getElementById("member-phone").value = user.phoneNr
         document.getElementById("member-email").value = user.email
+        document.getElementById("member-rank").value = user.rank
 
         modal.style.display = "block";
 
@@ -178,9 +188,10 @@
         user.birthday = document.getElementById("member-birthday").value
         user.phoneNr = document.getElementById("member-phone").value
         user.email = document.getElementById("member-email").value
+        user.rank = document.getElementById("member-rank").value
 
         const method = user.id ? "PUT" : "POST"
-        const url = (method === "PUT") ? URL + "/" + user.id : URL
+        const url = (method === "PUT") ? URL + "/members" + "/" + user.id : URL + "/members"
         const options = {
             method: method,
             headers: {
@@ -190,16 +201,15 @@
             body: JSON.stringify(user)
         }
         fetch(url, options)
-            .then(member=> {
-                console.log("Yes den er god")
-                cache.addEdit(member,method)
+            .then(member => {
+                cache.addEdit(member, method)
                 fetchUsers()
                 document.getElementById("myModal").style.display = "none";
             })
             .catch(e => alert(e))
     }
 
-    function deleteUser(){
+    function deleteUser() {
         evt.preventDefault()
         evt.stopPropagation()
         const target = evt.target
@@ -208,7 +218,7 @@
         cache.deleteOne(idToDelete)
 
         const method = "DELETE"
-        const url = URL + "/" + idToDelete
+        const url = URL + "/members" + "/" + idToDelete
         const options = {
             method: method,
             headers: {
@@ -228,11 +238,11 @@
                 fetchUsers()
             })
             .catch(e => alert(e))
-            fetchUsers()
+        fetchUsers()
     }
 
     function fetchUsers() {
-        fetch(URL)
+        fetch(URL + "/members")
             .then(response => response.json())
             .then(data => {
                 cache.addAll(data)
@@ -240,22 +250,8 @@
             })
     }
 
-    function setAgeCategory(y){
-
-        if (y < 18){
-            return "Junior"
-        }
-        else if (y > 18 && y < 60){
-            return "Adult"
-        }
-        else {
-            return "Senior"
-        }
-    }
-
     function buildRows() {
         const members = cache.getAll()
-
         const rows = members.map(member => {
             return `<tr class="member-box">
             <td>${member.name}</td>
@@ -263,13 +259,35 @@
             <td>${member.phoneNr}</td>
             <td>${member.email}</td>
             <td>${member.rank}</td>
-            <td>${dateFormatter(member.member_payment.lastPaymentDate)}</td>
+            <td>${calculatePayment(member.member_payment.lastPaymentDate)}</td>
+            <td hidden data-id-rank="${member.rank}"></td>
             <td><Button data-id-edit=${member.id}>Edit member</Button></td>
             <td><Button data-id-delete=${member.id}>Delete member</Button></td>
-            <td><Button data-id-updatePayment=${member.id}>Update payment</Button></td>
         </tr>`;
         })
         document.getElementById("t-body").innerHTML = rows.join("")
+    }
+
+
+    function calculatePayment(lastPaymentDate) {
+        let lastPayedDate = new Date(lastPaymentDate)
+        //let todayDate = new Date()
+        let src = ""
+        let oldDate = lastPayedDate,
+            todayDate = new Date(),
+            y1 = oldDate.getFullYear(),
+            y2 = todayDate.getFullYear(),
+            d1 = new Date(oldDate).setFullYear(2000),
+            d2 = new Date(todayDate).setFullYear(2000);
+
+        result = !(y2 - y1 > 1 || (y2 - y1 == 1 && d2 > d1))
+
+        if (result) {
+            src = "Payed"
+        } else {
+            src = "Not payed"
+        }
+        return src;
     }
 
     function dateFormatter(a) {
@@ -277,5 +295,4 @@
         d = tmpDate.split(" ")
         return d[3] + " " + d[1] + " " + d[2]
     }
-
 </script>

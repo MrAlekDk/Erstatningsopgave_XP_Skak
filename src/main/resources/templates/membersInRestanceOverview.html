@@ -1,0 +1,207 @@
+<html>
+<head xmlns:th="http://www.w3.org/1999/xhtml">
+    <meta charset="UTF-8">
+    <link th:href="@{/styles/standardStyle.css}" rel="stylesheet">
+    <link th:href="@{/styles/cashierStyle.css}" rel="stylesheet">
+    <title>Member in restance</title>
+</head>
+<body>
+<h1>XP Skak klub</h1>
+
+<table class="members" id="members">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Birthday</th>
+        <th>Phone number</th>
+        <th>Email</th>
+        <th>Category</th>
+        <th>Days since paydeadline</th>
+        <th>Pay amount</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody class="table-body" id="t-body">
+    <!-- <tr>
+        <td>Alexander</td>
+        <td>1998-07-13</td>
+        <td>42772069</td>
+        <td>alex030t@stud.kea.dk</td>
+    </tr> -->
+    </tbody>
+</table>
+</body>
+</html>
+<script>
+    function localCache(){
+        let users = []
+        const addEdit = (user,method) =>{
+            if(method==="POST"){
+                users.push(user)
+            }
+            else if(method==="PUT") {
+                users = users.map(u => u.id == user.id ? user: u)
+            }
+        }
+        return {
+            getAll : () => users , //This is the same as above
+            addAll : (all) => users = all,
+            deleteOne: (id) => users = users.filter(u => u.id !== Number(id)),
+            findById : (id) => users.find(u => u.id == id ),
+            addEdit :addEdit
+        }
+    }
+
+    const URL = 'http://localhost:8080/members'
+
+    function setUpHandlers() {
+        document.getElementById("t-body").onclick = handleTableClick
+    }
+    setUpHandlers()
+
+    function handleTableClick(evt) {
+        evt.preventDefault()
+        evt.stopPropagation()
+        const target = evt.target;
+        //data-id-delete
+        //Observe change compared to video
+        if(target.dataset.idPay){
+            const idToDelete = Number(target.dataset.idDelete)
+            const options = {
+                method: "POST",
+                headers: {'Accept': 'application/json'}
+            }
+            const idToPay = Number(target.dataset.idPay)
+            fetch(URL+"/payments/"+idToPay,options)
+                .then(x=>{
+                    fetchUsers()
+                })
+        }
+    }
+
+
+    const cache = localCache();
+    fetchUsers()
+
+
+    function saveUser() {
+        const user = {}
+        user.id = Number(document.getElementById("member-id").innerText)
+        user.name = document.getElementById("member-name").value
+        user.birthday = document.getElementById("member-birthday").value
+        user.phoneNr = document.getElementById("member-phone").value
+        user.email = document.getElementById("member-email").value
+
+        const method = user.id ? "PUT" : "POST"
+        const url = (method === "PUT") ? URL + "/" + user.id : URL
+        const options = {
+            method: method,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        }
+        fetch(url, options)
+            .then(member=> {
+                console.log("Yes den er god")
+                cache.addEdit(member,method)
+                fetchUsers()
+                document.getElementById("myModal").style.display = "none";
+            })
+            .catch(e => alert(e))
+    }
+
+    function fetchUsers() {
+        fetch(URL)
+            .then(response => response.json())
+            .then(data => {
+                cache.addAll(data)
+                buildRows()
+            })
+    }
+
+    function buildRows() {
+        const members = cache.getAll()
+        let membersFiltered = members.filter(member => calculatePayment(member.member_payment.lastPaymentDate))
+        const rows = membersFiltered.map(member => {
+            return `<tr class="member-box">
+            <td>${member.name}</td>
+            <td>${dateFormatter(member.birthday)}</td>
+            <td>${member.phoneNr}</td>
+            <td>${member.email}</td>
+            <td>${calculateCategory(member.birthday)}</td>
+            <td>${calculateDaysSinceDeadline(member.member_payment.lastPaymentDate)}</td>
+            <td>${calculateAmount(member.birthday, member.member_payment.lastPaymentDate)}</td>
+            <td><Button data-id-pay=${member.id}>Pay now</Button></td>
+        </tr>`;
+        })
+        document.getElementById("t-body").innerHTML = rows.join("")
+    }
+
+    function calculatePayment(lastPaymentDate){
+        let lastPayedDate = new Date(lastPaymentDate)
+        let oldDate = lastPayedDate,
+            todayDate = new Date(),
+            y1= oldDate.getFullYear(),
+            y2= todayDate.getFullYear(),
+            d1= new Date(oldDate).setFullYear(2000),
+            d2= new Date(todayDate).setFullYear(2000);
+
+        result = (y2 - y1 > 1 || (y2 - y1 == 1 && d2 > d1))
+        return result;
+    }
+
+    function dateFormatter(a) {
+        tmpDate = new Date(a.toString()).toDateString()
+        d = tmpDate.split(" ")
+        return d[3] + " " + d[1] + " " + d[2]
+    }
+
+    function calculateDaysSinceDeadline(lastPaymentDate){
+        let date1 = new Date(lastPaymentDate)
+        let date2 = new Date()
+
+        let difference = date2.getTime() - date1.getTime()
+        let days = Math.ceil(difference / (1000*3600*24))
+        return days-365
+    }
+
+    function calculateCategory(birthday){
+        birthd = new Date(birthday)
+        let ageDifMs = Date.now() - birthd
+        let ageDate = new Date(ageDifMs); // miliseconds from epoch
+        let age = Math.abs(ageDate.getUTCFullYear() - 1970);
+        if(age<18){
+            return "Junior"
+        }
+        if(age>17 && age<60){
+            return "Adult"
+        }
+        if(age>59){
+            return "Senior"
+        }
+    }
+
+
+    function calculateAmount(birthday, lastPaymentDate){
+        days = calculateDaysSinceDeadline(lastPaymentDate)
+        let rykkerGebyr = 0
+        if(days>10){
+            rykkerGebyr = 500
+        }
+        birthd = new Date(birthday)
+        let ageDifMs = Date.now() - birthd
+        let ageDate = new Date(ageDifMs); // miliseconds from epoch
+        let age = Math.abs(ageDate.getUTCFullYear() - 1970);
+        if(age<18){
+            return 250 + rykkerGebyr
+        }
+        if(age>17 && age<60){
+            return 650 + rykkerGebyr
+        }
+        if(age>59){
+            return 450 + rykkerGebyr
+        }
+    }
+</script>

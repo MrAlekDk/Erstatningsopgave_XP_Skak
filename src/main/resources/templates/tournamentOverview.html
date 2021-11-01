@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/styles/standardStyle.css}" rel="stylesheet">
+    <link th:href="@{/styles/cashierStyle.css}" rel="stylesheet">
+    <title>Tournaments</title>
+</head>
+<body>
+<h1>XP Skak klub</h1>
+
+<table class="members" id="members">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Date</th>
+        <th>Price</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody class="table-body" id="t-body">
+    <!-- <tr>
+        <td>Alexander</td>
+        <td>1998-07-13</td>
+        <td>42772069</td>
+        <td>alex030t@stud.kea.dk</td>
+    </tr> -->
+    </tbody>
+</table>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h5 id="modal-title"></h5>
+        <section class="form-box">
+            <form class="create-tournament">
+                <p hidden>Tournament ID: <span id="tournament-id"></span></p>
+                <div class="input-line">
+                    <label for="tournament-name">Name</label><br>
+                    <input type="text" id="tournament-name" name="tournament-name" placeholder="Member name here" required><br>
+                </div>
+                <div class="input-line">
+                    <label for="tournament-date">Date</label><br>
+                    <input type="date" id="tournament-date" name="tournament-date"><br>
+                </div>
+                <div class="input-line">
+                    <label for="tournament-price">Price</label><br>
+                    <input type="number" id="tournament-price" name="tournament-price"><br>
+                </div>
+            </form>
+        </section>
+        <div class="modal-footer">
+            <button id="btn-save" type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+        </div>
+    </div>
+</div>
+<button id="create-tournament" class="btn-new-tournament">Create new tournament</button>
+</body>
+</html>
+<script>
+    function localCache() {
+        let tournaments = []
+        const addEdit = (tournament, method) => {
+            if (method === "POST") {
+                tournaments.push(tournament)
+            } else if (method === "PUT") {
+                tournaments = tournaments.map(u => u.id == tournament.id ? tournament : u)
+            }
+        }
+        return {
+            getAll: () => tournaments, //This is the same as above
+            addAll: (all) => tournaments = all,
+            deleteOne: (id) => tournaments = tournaments.filter(u => u.id !== Number(id)),
+            findById: (id) => tournaments.find(u => u.id == id),
+            addEdit: addEdit
+        }
+    }
+
+    sessionStorage.setItem("URL", "http://localhost:8080");
+    //const URL = 'http://localhost:8080/members'
+    const URL = sessionStorage.getItem("URL")
+
+    function setUpHandlers() {
+        document.getElementById("create-tournament").onclick = makeNewTournament
+        document.getElementById("btn-save").onclick = saveTournament
+        document.getElementById("t-body").onclick = handleTableClick
+    }
+
+    setUpHandlers()
+
+    function handleTableClick(evt) {
+        evt.preventDefault()
+        evt.stopPropagation()
+        const target = evt.target;
+        //data-id-delete
+        if (target.dataset.idDelete) {
+            const idToDelete = Number(target.dataset.idDelete)
+            const options = {
+                method: "DELETE",
+                headers: {'Accept': 'application/json'}
+            }
+            fetch(URL + "/members" + "/" + idToDelete, options)
+                .then(x => {
+                    cache.deleteOne(idToDelete)
+                    fetchTournaments()
+                })
+        }
+        //Observe change compared to video
+        if (target.dataset.idEdit) {
+            const idToEdit = Number(target.dataset.idEdit)
+            const user = cache.findById(idToEdit)
+            showModal(user)
+        }
+
+        if (target.dataset.idPay) {
+            const idToDelete = Number(target.dataset.idDelete)
+            const options = {
+                method: "POST",
+                headers: {'Accept': 'application/json'}
+            }
+            const idToPay = Number(target.dataset.idPay)
+            fetch(URL + "/members" + "/payments/" + idToPay, options)
+                .then(x => {
+                    fetchTournaments()
+                })
+        }
+    }
+
+
+    const cache = localCache();
+    fetchTournaments()
+
+    function makeNewTournament() {
+        showModal({
+            id: null,
+            name: " ",
+            date: " ",
+            price: " ",
+        })
+    }
+
+    function showModal(tournament) {
+        const modal = document.getElementById("myModal");
+        let span = document.getElementsByClassName("close")[0];
+        document.getElementById("modal-title").innerText = tournament.id ? "Edit Tournament" : "Add Tournament"
+        document.getElementById("tournament-id").innerText = tournament.id
+        document.getElementById("tournament-name").value = tournament.name
+        if (tournament.id === null) {
+            document.getElementById("tournament-date").value = tournament.date
+        } else {
+            document.getElementById("tournament-date").value = tournament.date.split("T")[0]
+        }
+        document.getElementById("tournament-price").value = tournament.prize
+
+        modal.style.display = "block";
+
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    }
+
+    function saveTournament() {
+        const tournament = {}
+        tournament.id = Number(document.getElementById("tournament-id").innerText)
+        tournament.name = document.getElementById("tournament-name").value
+        tournament.date = document.getElementById("tournament-date").value
+        tournament.price = document.getElementById("tournament-price").value
+
+        const method = tournament.id ? "PUT" : "POST"
+        const url = (method === "PUT") ? URL + "/matches/tournaments" + "/" + tournament.id : URL + "/matches/tournaments"
+        const options = {
+            method: method,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(tournament)
+        }
+        fetch(url, options)
+            .then(tournament => {
+                cache.addEdit(tournament, method)
+                fetchTournaments()
+                document.getElementById("myModal").style.display = "none";
+            })
+            .catch(e => alert(e))
+    }
+
+    function fetchTournaments() {
+        fetch(URL + "/matches/tournaments")
+            .then(response => response.json())
+            .then(data => {
+                cache.addAll(data)
+                buildRows()
+            })
+    }
+
+    function buildRows() {
+        const tournaments = cache.getAll()
+        const rows = tournaments.map(tournament => {
+            return `<tr class="member-box">
+            <td>${tournament.name}</td>
+            <td>${tournament.date}</td>
+            <td>${tournament.prize}</td>
+            <td><Button data-id-edit=${tournament.id}>Edit Tournament</Button></td>
+            <td><Button data-id-delete=${tournament.id}>Cancel Tournament</Button></td>
+        </tr>`;
+        })
+        document.getElementById("t-body").innerHTML = rows.join("")
+    }
+
+    function dateFormatter(a) {
+        tmpDate = new Date(a.toString()).toDateString()
+        d = tmpDate.split(" ")
+        return d[3] + " " + d[1] + " " + d[2]
+    }
+</script>

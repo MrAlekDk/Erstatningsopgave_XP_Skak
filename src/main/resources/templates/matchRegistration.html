@@ -3,109 +3,255 @@
 <head>
     <meta charset="UTF-8">
     <link th:href="@{/styles/standardStyle.css}" rel="stylesheet">
-    <title>Match Registration</title>
-</head>
+    <link th:href="@{/styles/matchRegistration.css}" rel="stylesheet">
+    <head/>
 <body>
-<h1>XP Skat Klub</h1>
 
+<div>
+    <table class="members" id="members">
+        <thead>
+        <tr>
+            <td>Id</td>
+            <td>Team</td>
+            <th>Name</th>
+            <th>Rank</th>
+        </tr>
+        </thead>
+        <tbody class="table-body" id="t-body">
+        <tr>
+            <td>113</td>
+            <td>Holdet</td>
+            <td>Alexander</td>
+            <td>13</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
+<div>
+    <table class="matches" id="matches">
+        <thead>
+        <tr>
+            <td>Winner</td>
+            <td>Loser</td>
+            <td>Date</td>
+        </tr>
+        </thead>
+        <tbody class="match-t-body" id="match-t-body">
+        <td>Asger</td>
+        <td>Alek</td>
+        <td>31/10/2021</td>
+        </tbody>
+    </table>
+</div>
 
+<section class="form-box">
+    <form class="register-match">
 
-<table hidden class="member" id="member">
-    <thead>
-    <th>Name</th>
-    <th>Birthday</th>
-    <th>Phone number</th>
-    <th>Email</th>
-    <th>Rank</th>
-    </thead>
-</table>
+        <div class="input-line">
+            <label for="member-winner">Winner</label><br>
+            <input type="text" id="member-winner" name="member-winner" placeholder="Winners member id"
+                   required><br>
+            <!--    <select name="member-winner" id="member-winner" required></select>
+            -->
+        </div>
 
+        <div class="input-line">
+            <label for="member-loser">Loser</label><br>
+            <input type="text" id="member-loser" name="member-loser" placeholder="Losers member id"
+                   required><br>
+        </div>
+
+        <div class="input-line">
+            <label for="match-date">Match date</label><br>
+            <input type="date" id="match-date" name="match-date"><br>
+        </div>
+    </form>
+    <div class="input-dropdown">
+        <form>
+            <label for="match-type">Choose match type</label><br>
+            <select id="match-type" name="match-type">
+                <option value="match" selected>Match</option>
+                <option value="tournament">Tournament</option>
+            </select>
+        </form>
+    </div>
+</section>
 
 <div id="myModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
         <span class="close">&times;</span>
-        <h4 id="modal-title">Register Match</h4>
-        <section class="form-box">
-            <form class="create-user">
-                <p hidden>User ID: <span id="member-id"></span></p>
-                <div class="input-line">
-                    <label for="member-winner">Player</label><br>
-                    <input type="text" id="member-winner" name="member-player-one" placeholder="Enter player id here"><br>
-                </div>
-                <div class="input-line">
-                    <label for="member-loser">Opponent</label><br>
-                    <input type="text" id="member-loser" name="member-player-two" placeholder="Enter player id here"><br>
-                </div>
-            </form>
-        </section>
+        <h5 id="modal-title"></h5>
+
         <div class="modal-footer">
-            <button id="btn-save" type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+            <button onclick="saveMatch()" id="btn-save" type="button" class="btn btn-primary" data-bs-dismiss="modal">
+                Save changes
+            </button>
         </div>
     </div>
 </div>
 
 
+<div class="btn-register-match">
+    <button id="btn-register-match" type="button" class="btn btn-primary" data-bs-dismiss="modal">Register new match or
+        tournament winner
+    </button>
+</div>
+
 </body>
+</html>
 
 
 <script>
-    function localCache(){
+    function localCache() {
         let users = []
-        const addEdit = (user,method) =>{
-            if(method==="POST"){
+        let matches = []
+        const addEdit = (user, method) => {
+            if (method === "POST") {
                 users.push(user)
-            }
-            else if(method==="PUT") {
-                users = users.map(u => u.id == user.id ? user: u)
+            } else if (method === "PUT") {
+                users = users.map(u => u.id == user.id ? user : u)
             }
         }
         return {
-            getAll : () => users , //This is the same as above
-            addAll : (all) => users = all,
+            getAll: () => users, //This is the same as above
+            getMatches: () => matches, //This is the same as above
+            addAll: (all) => users = all,
+            populateMatches: (all) => matches = all,
             deleteOne: (id) => users = users.filter(u => u.id !== Number(id)),
-            findById : (id) => users.find(u => u.id == id ),
-            addEdit :addEdit
+            findUserById: (id) => users.find(u => u.id == id),
+            findMatchById: (id) => matches.find(m => m.id == id),
+            addEdit:addEdit
         }
     }
 
-    const URL = 'http://localhost:8080/members'
+    function setDateToday() {
+        let date = new Date();
+        let currentDate = date.toISOString().substring(0, 10);
+
+        document.getElementById('match-date').value = currentDate;
+    }
+
+    setDateToday()
+
+    //TODO Implementer @BeforeAll metode
+    sessionStorage.setItem("URL", "http://localhost:8080");
+    const URL = sessionStorage.getItem("URL")
+
+    function setUpHandlers() {
+        //document.getElementById("btn-save").onclick = updateRank;
+        document.getElementById("btn-register-match").onclick = saveMatch
+    }
+
+    setUpHandlers()
+
+    const cache = localCache();
+    fetchUsers()
+    fetchMatches()
+
+    function fetchUsers() {
+        fetch(URL + "/members")
+            .then(response => response.json())
+            .then(data => {
+                cache.addAll(data)
+                buildRows()
+            })
+    }
+
+    function buildRows() {
+        const members = cache.getAll()
+        const rows = members.map(member => {
+            return `<tr class="member-box">
+            <td>${member.id}</td>
+            <td>${member.team.name}</td>
+            <td>${member.name}</td>
+            <td>${member.rank}</td>
+        </tr>`;
+        })
+        document.getElementById("t-body").innerHTML = rows.join("")
+    }
+
+    function fetchMatches() {
+        fetch(URL + "/matches")
+            .then(response => response.json())
+            .then(data => {
+                cache.populateMatches(data)
+                buildMatchRows()
+            })
+    }
+
+    function buildMatchRows() {
+        const matches = cache.getMatches()
+        const rows = matches.map(match => {
+            return `<tr class="member-box">
+            <td>${match.winnerMember.name}</td>
+            <td>${match.loserMember.name}</td>
+            <td>${dateFormatter(match.matchDate)}</td>
+        </tr>`;
+        })
+        document.getElementById("match-t-body").innerHTML = rows.join("")
+    }
+
+    function handleTableClick(evt) {
+        evt.preventDefault()
+        evt.stopPropagation()
+        const target = evt.target;
+        //Observe change compared to video
+
+        //showModal()
+        if (target.dataset.idEdit) {
+            const idToEdit = Number(target.dataset.idEdit)
+            const loser = cache.findById(idToEdit)
+            const winner = cache.findById(idToEdit)
+        }
+    }
+
+    function saveMatch() {
+        const match = {}
+        match.winnerMember = cache.findUserById(document.getElementById("member-winner").value)
+        match.loserMember = cache.findUserById(document.getElementById("member-loser").value)
+        match.gameType = document.getElementById("match-type").innerText
+
+        let gameType = document.getElementById("match-type")
+        let selectedGameType = gameType.options[gameType.selectedIndex].value;
+
+        //console.log("selected Game Type" + selectedGameType)
 
 
+        //let winnerId = document.getElementById("member-winner").value;
+        //let loserId = document.getElementById("member-loser").value
 
-    function saveRank() {
+        //console.log("winnerid" + winnerId + "and loserId" + loserId)
+
+
+        //match.matchDate = document.getElementById("match-date").value
+//        let e = document.getElementById("game-type")
+//        match.gameType = e.options[e.selectedIndex].value;
+
+        const method = "POST"
+        const options = {
+            method: method,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(match)
+        }
+
+        fetch(URL + "/matches", options)
+            .then(response => response.json())
+            .then(() => {
+                fetchMatches()
+                fetchUsers()
+            })
+    }
+
+    function showModal() {
+        let gameType;
         const modal = document.getElementById("myModal");
         let span = document.getElementsByClassName("close")[0];
-
-        const winner = {}
-        const loser = {}
-
-        winner.id = Number(document.getElementById("member-winner").innerText)
-        loser.id = Number(document.getElementById("member-loser").innerText)
-/*
-        const method = winner.id ? "PUT" : "POST"
-        const url = (method === "PUT") ? URL + "/" + winner.id : URL
-        const options = {
-            method: method,
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(winner)
-        }
-
-        const method = loser.id ? "PUT" : "POST"
-        const url = (method === "PUT") ? URL + "/" + loser.id : URL
-        const options = {
-            method: method,
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(loser)
-        }
-        */
+        //document.getElementById("modal-title").innerText = user.id ? "Edit User" : "Add User"
 
         modal.style.display = "block";
 
@@ -118,9 +264,14 @@
                 modal.style.display = "none";
             }
         }
+
+        btn - save
     }
 
-
+    function dateFormatter(a) {
+        tmpDate = new Date(a.toString()).toDateString()
+        d = tmpDate.split(" ")
+        return d[3] + " " + d[1] + " " + d[2]
+    }
 
 </script>
-</html>

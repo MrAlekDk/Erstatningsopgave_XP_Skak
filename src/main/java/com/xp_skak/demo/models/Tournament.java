@@ -15,8 +15,8 @@ public class Tournament {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @Column(name = "prize")
-    private int prize;
+    @Column(name = "price")
+    private int price;
 
     @Column(name = "date", nullable = false)
     private Date date;
@@ -27,6 +27,14 @@ public class Tournament {
     @JoinColumn(name = "winner", referencedColumnName = "participants")
     private Participant participant;
 
+    public Tournament(){
+    }
+
+    public Tournament(String name, int price, Date date){
+        this.name=name;
+        this.price=price;
+        this.date=date;
+    }
 
     public Long getId() {
         return id;
@@ -45,11 +53,11 @@ public class Tournament {
     }
 
     public int getPrize() {
-        return prize;
+        return price;
     }
 
     public void setPrize(int prize) {
-        this.prize = prize;
+        this.price = prize;
     }
 
     public Date getDate() {
