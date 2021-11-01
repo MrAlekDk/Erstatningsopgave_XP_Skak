@@ -106,6 +106,7 @@
 <script>
     function localCache() {
         let users = []
+        let matches = []
         const addEdit = (user, method) => {
             if (method === "POST") {
                 users.push(user)
@@ -115,16 +116,19 @@
         }
         return {
             getAll: () => users, //This is the same as above
+            getMatches: () => matches, //This is the same as above
             addAll: (all) => users = all,
+            populateMatches: (all) => matches = all,
             deleteOne: (id) => users = users.filter(u => u.id !== Number(id)),
-            findById: (id) => users.find(u => u.id == id),
-            addEdit: addEdit
+            findUserById: (id) => users.find(u => u.id == id),
+            findMatchById: (id) => matches.find(m => m.id == id),
+            addEdit:addEdit
         }
     }
 
     function setDateToday() {
         let date = new Date();
-        let currentDate = date.toISOString().substring(0,10);
+        let currentDate = date.toISOString().substring(0, 10);
 
         document.getElementById('match-date').value = currentDate;
     }
@@ -172,13 +176,13 @@
         fetch(URL + "/matches")
             .then(response => response.json())
             .then(data => {
-                cache.addAll(data)
+                cache.populateMatches(data)
                 buildMatchRows()
             })
     }
 
     function buildMatchRows() {
-        const matches = cache.getAll()
+        const matches = cache.getMatches()
         const rows = matches.map(match => {
             return `<tr class="member-box">
             <td>${match.winnerMember.name}</td>
@@ -205,15 +209,21 @@
 
     function saveMatch() {
         const match = {}
-
-        match.winnerMember = cache.findById(document.getElementById("member-winner").value)
-        match.loserMember = cache.findById(document.getElementById("member-loser").value)
+        match.winnerMember = cache.findUserById(document.getElementById("member-winner").value)
+        match.loserMember = cache.findUserById(document.getElementById("member-loser").value)
         match.gameType = document.getElementById("match-type").innerText
 
         let gameType = document.getElementById("match-type")
         let selectedGameType = gameType.options[gameType.selectedIndex].value;
 
-        console.log("selected Game Type" + selectedGameType)
+        //console.log("selected Game Type" + selectedGameType)
+
+
+        //let winnerId = document.getElementById("member-winner").value;
+        //let loserId = document.getElementById("member-loser").value
+
+        //console.log("winnerid" + winnerId + "and loserId" + loserId)
+
 
         //match.matchDate = document.getElementById("match-date").value
 //        let e = document.getElementById("game-type")
@@ -231,9 +241,9 @@
 
         fetch(URL + "/matches", options)
             .then(response => response.json())
-            .then(data => {
-                fetchUsers()
+            .then(() => {
                 fetchMatches()
+                fetchUsers()
             })
     }
 

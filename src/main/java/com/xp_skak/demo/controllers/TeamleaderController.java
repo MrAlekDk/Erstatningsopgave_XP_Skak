@@ -33,7 +33,9 @@ public class TeamleaderController {
     @PostMapping
     public ResponseEntity<Match> saveMatch(@RequestBody Match match) {
         System.out.println("Vi ramte endpointet");
-        System.out.println(match.getWinnerMember().getName());
+       // System.out.println(match.getWinnerMember().getName());
+       // System.out.println(match.getWinnerMember());
+
         matchService.saveMatch(match);
         memberService.updateRank(match.getWinnerMember(), match.getLoserMember());
         return ResponseEntity.status(HttpStatus.OK).body(match);
