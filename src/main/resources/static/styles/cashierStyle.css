@@ -8,7 +8,7 @@ tbody, tr{
     border-bottom: 1px solid #dddddd;
 }
 
-tbody tr:nth-of-type(even) {
+tbody tr:nth-of-type(2n+1) {
     background-color: #cb7d4b;
 }
 
@@ -101,6 +101,34 @@ h5{
     border-radius: 10px;
     padding-bottom: 30px;
 }
+.form-box {
+    padding: 10px;
+    margin: 20px auto;
+    width: 280px;
+    background: green;
+    border-radius: 10px;
+}
+
+.match-input-line, .input-dropdown, .btn-register-match {
+    font-family: "Malgun Gothic";
+    font-size: 15px;
+    font-weight: bold;
+    color: black;
+    text-align: center;
+    padding-bottom: 10px;
+}
+
+
+.list-category {
+    text-align: center;
+    width: 280px;
+    margin: 20px auto;
+    background: green;
+    padding: 10px;
+    border-radius: 10px;
+    color: #ffd19a;
+}
+
 
 .modal-footer{
     display: flex;

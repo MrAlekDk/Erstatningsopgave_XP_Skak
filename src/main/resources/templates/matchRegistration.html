@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <link th:href="@{/styles/standardStyle.css}" rel="stylesheet">
-    <link th:href="@{/styles/matchRegistration.css}" rel="stylesheet">
+    <link th:href="@{/styles/cashierStyle.css}" rel="stylesheet">
     <head/>
 <body>
-
+<h1>XP Skak klub</h1>
+<h2 class="list-category">Members</h2>
 <div>
     <table class="members" id="members">
         <thead>
@@ -27,9 +28,9 @@
         </tbody>
     </table>
 </div>
-
+<h2 class="list-category">Matches</h2>
 <div>
-    <table class="matches" id="matches">
+    <table class="members" id="matches">
         <thead>
         <tr>
             <td>Winner</td>
@@ -48,19 +49,19 @@
 <section class="form-box">
     <form class="register-match">
 
-        <div class="input-line">
+        <div class="match-input-line">
             <label for="member-winner">Winner</label><br>
             <input type="text" id="member-winner" name="member-winner" placeholder="Winners member id"
                    required><br>
         </div>
 
-        <div class="input-line">
+        <div class="match-input-line">
             <label for="member-loser">Loser</label><br>
             <input type="text" id="member-loser" name="member-loser" placeholder="Losers member id"
                    required><br>
         </div>
 
-        <div class="input-line">
+        <div class="match-input-line">
             <label for="match-date">Match date</label><br>
             <input type="date" id="match-date" name="match-date"><br>
         </div>
@@ -73,6 +74,12 @@
                 <option value="tournament">Tournament</option>
             </select>
         </form>
+    </div>
+
+    <div class="btn-register-match">
+        <button id="btn-register-match" type="button" class="btn btn-primary" data-bs-dismiss="modal">Register new match or
+            tournament winner
+        </button>
     </div>
 </section>
 
@@ -91,11 +98,7 @@
 </div>
 
 
-<div class="btn-register-match">
-    <button id="btn-register-match" type="button" class="btn btn-primary" data-bs-dismiss="modal">Register new match or
-        tournament winner
-    </button>
-</div>
+
 
 </body>
 </html>
