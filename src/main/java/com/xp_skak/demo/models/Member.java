@@ -34,10 +34,9 @@ public class Member {
     @Column(name = "rank", nullable = false)
     private int rank;
 
-    //TODO skal det være ManyToOne eller OneToMany?
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "team_id", referencedColumnName = "id", insertable = false, updatable = false)
-    private Team team;
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    @JoinColumn(name = "team_id", referencedColumnName = "id", insertable = false, updatable = false)
+    private String team;
 
     private Long login_id;
 
@@ -61,11 +60,11 @@ public class Member {
 
 
 
-    public Team getTeam() {
+    public String getTeam() {
         return team;
     }
 
-    public void setTeam(Team team) {
+    public void setTeam(String team) {
         this.team = team;
     }
 

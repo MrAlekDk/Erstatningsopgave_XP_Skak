@@ -25,8 +25,8 @@ VALUES
 (400,'Ringkøbing skaktournering',1200,'2022-01-24'),
 (401,'Roskilde skakprix',50000,'2022-06-24');
 
-INSERT INTO match_history (id, winner_member_id, loser_member_id, game_type)
-VALUES (100, 100, 101, 'Match'),
-       (101, 101, 103, 'Match'),
-       (102, 103, 104, 'Match'),
-       (103, 103, 105, 'Match');
+INSERT INTO match_history (id, winner_member_name, loser_membeR_name, game_type)
+VALUES (100, 'Asger', 'Alek', 'Match'),
+       (101, 'Kurt', 'Ingeborg', 'Match'),
+       (102, 'Lars', 'Kurt', 'Match'),
+       (103, 'Anne', 'Alek', 'Match');

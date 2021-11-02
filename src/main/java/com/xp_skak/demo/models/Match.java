@@ -14,15 +14,13 @@ public class Match {
     @Column(name = "id", nullable = false, unique = true, updatable = false)
     private Long id;
 
-    //TODO er det korrekt?
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "winner_member_id", referencedColumnName = "id", nullable = false)
-    private Member winnerMember;
+//    @ManyToOne(cascade = CascadeType.MERGE)
+//    @JoinColumn(name = "winner_member_id", referencedColumnName = "id", nullable = false)
+    private String winnerMemberName;
 
-    //TODO er det korrekt?
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "loser_member_id", referencedColumnName = "id", nullable = false)
-    private Member loserMember;
+//    @ManyToOne(cascade = CascadeType.MERGE)
+//    @JoinColumn(name = "loser_member_id", referencedColumnName = "id", nullable = false)
+    private String loserMemberName;
 
     @Column(name = "game_type", nullable = false)
     private String gameType;
@@ -48,20 +46,20 @@ public class Match {
         this.id = id;
     }
 
-    public Member getWinnerMember() {
-        return winnerMember;
+    public String getWinnerMemberName() {
+        return winnerMemberName;
     }
 
-    public void setWinnerMember(Member winnerMember) {
-        this.winnerMember = winnerMember;
+    public void setWinnerMemberName(String winnerMember) {
+        this.winnerMemberName = winnerMember;
     }
 
-    public Member getLoserMember() {
-        return loserMember;
+    public String getLoserMemberName() {
+        return loserMemberName;
     }
 
-    public void setLoserMember(Member loserMember) {
-        this.loserMember = loserMember;
+    public void setLoserMemberName(String loserMember) {
+        this.loserMemberName = loserMember;
     }
 
     public String getGameType() {

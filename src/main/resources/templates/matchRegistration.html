@@ -12,7 +12,7 @@
         <thead>
         <tr>
             <td>Id</td>
-            <td>Team</td>
+            <!--            <td>Team</td>-->
             <th>Name</th>
             <th>Rank</th>
         </tr>
@@ -52,8 +52,6 @@
             <label for="member-winner">Winner</label><br>
             <input type="text" id="member-winner" name="member-winner" placeholder="Winners member id"
                    required><br>
-            <!--    <select name="member-winner" id="member-winner" required></select>
-            -->
         </div>
 
         <div class="input-line">
@@ -122,7 +120,7 @@
             deleteOne: (id) => users = users.filter(u => u.id !== Number(id)),
             findUserById: (id) => users.find(u => u.id == id),
             findMatchById: (id) => matches.find(m => m.id == id),
-            addEdit:addEdit
+            addEdit: addEdit
         }
     }
 
@@ -164,13 +162,14 @@
         const rows = members.map(member => {
             return `<tr class="member-box">
             <td>${member.id}</td>
-            <td>${member.team.name}</td>
             <td>${member.name}</td>
             <td>${member.rank}</td>
         </tr>`;
         })
         document.getElementById("t-body").innerHTML = rows.join("")
     }
+
+    // <td>${member.team.name}</td>
 
     function fetchMatches() {
         fetch(URL + "/matches")
@@ -185,8 +184,8 @@
         const matches = cache.getMatches()
         const rows = matches.map(match => {
             return `<tr class="member-box">
-            <td>${match.winnerMember.name}</td>
-            <td>${match.loserMember.name}</td>
+            <td>${match.winnerMemberName}</td>
+            <td>${match.loserMemberName}</td>
             <td>${dateFormatter(match.matchDate)}</td>
         </tr>`;
         })
@@ -209,8 +208,8 @@
 
     function saveMatch() {
         const match = {}
-        match.winnerMember = cache.findUserById(document.getElementById("member-winner").value)
-        match.loserMember = cache.findUserById(document.getElementById("member-loser").value)
+        match.winnerMemberName = cache.findUserById(document.getElementById("member-winner").value).name
+        match.loserMemberName = cache.findUserById(document.getElementById("member-loser").value).name
         match.gameType = document.getElementById("match-type").innerText
 
         let gameType = document.getElementById("match-type")

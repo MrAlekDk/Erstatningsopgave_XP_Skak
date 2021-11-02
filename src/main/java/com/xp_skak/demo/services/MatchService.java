@@ -14,13 +14,13 @@ import java.util.List;
 public class MatchService {
 
     //TODO Construction injection skal fixes
-    //@Autowired
+    @Autowired
     MatchRepository matchRepository;
     TournamentRepository tournamentRepository;
 
-    public MatchService(MatchRepository matchRepository, TournamentRepository tournamentRepository){
-        this.matchRepository=matchRepository;
-        this.tournamentRepository=tournamentRepository;
+    public MatchService(MatchRepository matchRepository, TournamentRepository tournamentRepository) {
+        this.matchRepository = matchRepository;
+        this.tournamentRepository = tournamentRepository;
     }
 
     public MatchService() {
@@ -36,6 +36,31 @@ public class MatchService {
         matchRepository.save(match);
     }
 
+    public void deleteMatch(Long playerId) {
+
+        /*
+        matchRepository.deleteMatchesByWinnerId(playerId);
+
+
+        while (matchRepository.deleteMatchesByWinnerId(playerId, playerId) != null) {
+            Match winnerIdMatch = matchRepository.deleteMatchesByWinnerId(playerId, playerId);
+            matchRepository.delete(winnerIdMatch);
+        }
+
+        while (matchRepository.findByloser_member_id(playerId) != null) {
+            Match loserIdMatch = matchRepository.findByloser_member_id(playerId);
+            matchRepository.delete(loserIdMatch);
+        }
+
+
+        Match winnerIdMatch = matchRepository.findBywinner_member_id(playerId);
+        matchRepository.delete(winnerIdMatch);
+
+        Match loserIdMatch = matchRepository.findByloser_member_id(playerId);
+        matchRepository.delete(loserIdMatch);
+        */
+
+    }
 
     public List<Tournament> getAllTournaments() {
         List<Tournament> allTournaments = new ArrayList<>();
@@ -43,7 +68,7 @@ public class MatchService {
         return allTournaments;
     }
 
-    public void saveNewTournament(Tournament Newtournament) {
-        tournamentRepository.save(Newtournament);
+    public void saveNewTournament(Tournament newTournament) {
+        tournamentRepository.save(newTournament);
     }
 }

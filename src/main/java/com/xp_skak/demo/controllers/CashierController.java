@@ -1,6 +1,7 @@
 package com.xp_skak.demo.controllers;
 
 import com.xp_skak.demo.models.Member;
+import com.xp_skak.demo.services.MatchService;
 import com.xp_skak.demo.services.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +15,17 @@ import java.util.List;
 public class CashierController {
 
     MemberService memberService;
+    MatchService matchService;
 
+    /*
     public CashierController(MemberService memberService){
         this.memberService= memberService;
+    }
+    */
+
+    public CashierController(MemberService memberService, MatchService matchService) {
+        this.memberService = memberService;
+        this.matchService = matchService;
     }
 
     @GetMapping
@@ -40,7 +49,6 @@ public class CashierController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Member> deleteMember(@PathVariable("id") Long id){
-
         memberService.deleteMemberById(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -51,5 +59,4 @@ public class CashierController {
         memberService.registerPayment(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-
 }
