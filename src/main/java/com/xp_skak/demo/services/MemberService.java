@@ -57,17 +57,17 @@ public class MemberService {
         paymentRepository.save(tmp);
     }
 
-    public void updateRank(Member winner, Member loser) {
-//        Optional<Member> winningMember = memberRep.findById(winner.getId());
-//        Optional<Member> losingMember = memberRep.findById(loser.getId());
+    public void updateRank(long winnerId, long loserId) {
+        Member winningMember = memberRep.findById(winnerId).get();
+        Member losingMember = memberRep.findById(loserId).get();
         int loserPoint = 3;
         int winnerPoint = 3;
 
-        winner.setRank(winner.getRank() + winnerPoint);
-        loser.setRank(loser.getRank() - loserPoint);
+        winningMember.setRank(winningMember.getRank() + winnerPoint);
+        losingMember.setRank(losingMember.getRank() - loserPoint);
 
-        memberRep.save(winner);
-        memberRep.save(loser);
+        memberRep.save(winningMember);
+        memberRep.save(losingMember);
     }
 
 }

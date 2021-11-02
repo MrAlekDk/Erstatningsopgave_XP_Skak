@@ -119,6 +119,7 @@
             populateMatches: (all) => matches = all,
             //deleteOne: (id) => users = users.filter(u => u.id !== Number(id)),
             findUserById: (id) => users.find(u => u.id == id),
+            findUserByName: (name) => users.find(u => u.name ===name)
             //findMatchById: (id) => matches.find(m => m.id == id),
             //addEdit: addEdit
         }
@@ -212,6 +213,10 @@
         match.loserMemberName = cache.findUserById(document.getElementById("member-loser").value).name
         match.gameType = document.getElementById("match-type").innerText
 
+        let winner = document.getElementById("member-winner").value
+        let loser = document.getElementById("member-loser").value
+
+
         let gameType = document.getElementById("match-type")
         let selectedGameType = gameType.options[gameType.selectedIndex].value;
 
@@ -229,7 +234,7 @@
             body: JSON.stringify(match)
         }
 
-        fetch(URL + "/matches", options)
+        fetch(URL + "/matches/"+winner+"/"+loser, options)
             .then(response => response.json())
             .then(() => {
                 fetchMatches()
