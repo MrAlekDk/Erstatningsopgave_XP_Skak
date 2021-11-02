@@ -80,7 +80,7 @@ class MemberServiceTest {
     @Test
     void createNewMember() {
         Member memberTest = new Member("Alek", new Date(), "42424242", "email@gmail.com");
-
+        memberTest.setId(1L);
         memberService.addNewMember(memberTest);
 
         Mockito.verify(memberRep, times(1)).save(Mockito.any(Member.class));
@@ -91,14 +91,14 @@ class MemberServiceTest {
         Member memberToUpdate = memberService.getSpecificMember(1L);
         memberToUpdate.setId(1L);
 
-        memberService.updateMember(memberToUpdate);
-        memberToUpdate.setName("Alexander");
+        //memberService.updateMember(memberToUpdate);
+        memberToUpdate.setName("Alexander S");
 
         memberService.updateMember(memberToUpdate);
 
 
-        assertEquals("Alexander", memberService.getSpecificMember(1L).getName());
-        Mockito.verify(memberRep, times(2)).save(memberToUpdate);
+        assertEquals("Alexander S", memberService.getSpecificMember(1L).getName());
+        Mockito.verify(memberRep, times(1)).save(memberToUpdate);
 
     }
 

@@ -68,4 +68,19 @@ public class MatchService {
     public void saveNewTournament(Tournament newTournament) {
         tournamentRepository.save(newTournament);
     }
+
+    public Tournament getSpecificTournament(Long id) {
+        return tournamentRepository.findById(id).get();
+    }
+
+    public void updateTournament(Tournament tournamentUpdatet) {
+        Tournament tournamentToUpdate = tournamentRepository.findById(tournamentUpdatet.getId()).get();
+
+        tournamentToUpdate = tournamentUpdatet;
+        tournamentRepository.save(tournamentToUpdate);
+    }
+
+    public void deleteTournamentById(Long tournamentId) {
+        tournamentRepository.deleteById(tournamentId);
+    }
 }

@@ -44,11 +44,6 @@ class MatchServiceTest {
         Mockito.when(tournamentRepository.save(testTournament1)).thenReturn(testTournament1);
 
         Mockito.when(tournamentRepository.findAll()).thenReturn(testList);
-
-        //Mockito.when(tournamentRepository.findById(Long.valueOf(1))).thenReturn(java.util.Optional.of(paymentTest));
-        //Mockito.when(tournamentRepository.save(paymentTest)).thenReturn(paymentTest);
-
-
     }
 
 
@@ -73,6 +68,34 @@ class MatchServiceTest {
 
         matchService.saveNewTournament(tournamentTest);
 
-        //Mockito.verify(memberRep, times(1)).save(Mockito.any(Member.class));
+        Mockito.verify(tournamentRepository, times(1)).save(Mockito.any(Tournament.class));
     }
+
+    @Test
+    void updateTournamentTest(){
+        Tournament tournamentToUpdate = matchService.getSpecificTournament(1L);
+        tournamentToUpdate.setId(1L);
+
+        //memberService.updateMember(memberToUpdate);
+        tournamentToUpdate.setName("A new tournament name");
+
+        matchService.updateTournament(tournamentToUpdate);
+
+
+        assertEquals("A new tournament name", matchService.getSpecificTournament(1L).getName());
+        Mockito.verify(tournamentRepository, times(1)).save(tournamentToUpdate);
+    }
+
+    @Test
+    void deleteTournamentTest(){
+
+        matchService.deleteTournamentById(1L);
+
+        Mockito.verify(tournamentRepository).deleteById(1l);
+
+        Mockito.when(tournamentRepository.findById(1L)).thenReturn(null);
+        Mockito.verify(tournamentRepository, times(1)).deleteById(1L);
+        //assertEquals(null,matchService.getSpecificTournament(1l));
+    }
+
 }
