@@ -14,7 +14,7 @@ import java.util.List;
 public class MatchService {
 
     //TODO Construction injection skal fixes
-    @Autowired
+    //@Autowired
     MatchRepository matchRepository;
     TournamentRepository tournamentRepository;
 
