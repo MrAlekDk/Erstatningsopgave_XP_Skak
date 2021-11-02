@@ -105,22 +105,22 @@
     function localCache() {
         let users = []
         let matches = []
-        const addEdit = (user, method) => {
+        /*const addEdit = (user, method) => {
             if (method === "POST") {
                 users.push(user)
             } else if (method === "PUT") {
                 users = users.map(u => u.id == user.id ? user : u)
             }
-        }
+        }*/
         return {
             getAll: () => users, //This is the same as above
             getMatches: () => matches, //This is the same as above
             addAll: (all) => users = all,
             populateMatches: (all) => matches = all,
-            deleteOne: (id) => users = users.filter(u => u.id !== Number(id)),
+            //deleteOne: (id) => users = users.filter(u => u.id !== Number(id)),
             findUserById: (id) => users.find(u => u.id == id),
-            findMatchById: (id) => matches.find(m => m.id == id),
-            addEdit: addEdit
+            //findMatchById: (id) => matches.find(m => m.id == id),
+            //addEdit: addEdit
         }
     }
 
@@ -138,7 +138,7 @@
     const URL = sessionStorage.getItem("URL")
 
     function setUpHandlers() {
-        //document.getElementById("btn-save").onclick = updateRank;
+        document.getElementById("btn-register-match").onclick = updateRank;
         document.getElementById("btn-register-match").onclick = saveMatch
     }
 
@@ -215,15 +215,6 @@
         let gameType = document.getElementById("match-type")
         let selectedGameType = gameType.options[gameType.selectedIndex].value;
 
-        //console.log("selected Game Type" + selectedGameType)
-
-
-        //let winnerId = document.getElementById("member-winner").value;
-        //let loserId = document.getElementById("member-loser").value
-
-        //console.log("winnerid" + winnerId + "and loserId" + loserId)
-
-
         //match.matchDate = document.getElementById("match-date").value
 //        let e = document.getElementById("game-type")
 //        match.gameType = e.options[e.selectedIndex].value;
@@ -244,6 +235,37 @@
                 fetchMatches()
                 fetchUsers()
             })
+    }
+
+    function updateRank() {
+        const winnerUser = cache.findUserById(document.getElementById("member-winner").value)
+        const loserUser = cache.findUserById(document.getElementById("member-loser").value)
+
+        const method = "PUT"
+        const options = {
+            method: method,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(winnerUser)
+        }
+
+        fetch(URL + "/matches", options)
+            .then(response => response.json())
+
+        const method1 = "PUT"
+        const options1 = {
+            method: method1,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(loserUser)
+        }
+
+    fetch(URL + "/matches", options1)
+        .then(response => response.json())
     }
 
     function showModal() {

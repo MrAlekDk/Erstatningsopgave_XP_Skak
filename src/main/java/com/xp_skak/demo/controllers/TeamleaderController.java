@@ -31,9 +31,9 @@ public class TeamleaderController {
     }
 
     @PostMapping
-    public ResponseEntity<Match> saveMatch(@RequestBody Match match) {
+    public ResponseEntity<Match> saveMatch(@RequestBody Match match, Member winnerMember, Member loserMember) {
         matchService.saveMatch(match);
-        //memberService.updateRank(getWinnerMember(), match.getLoserMember());
+        memberService.updateRank(winnerMember, loserMember);
         return ResponseEntity.status(HttpStatus.OK).body(match);
     }
 
