@@ -27,8 +27,4 @@ public class ViewController {
         return "tournamentOverview.html";
     }
 
-    @GetMapping(value = "/match-registration")
-    public String registerMatch() {
-        return "matchRegistration.html";
-    }
 }
