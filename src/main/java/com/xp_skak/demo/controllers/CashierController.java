@@ -40,7 +40,7 @@ public class CashierController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Member> deleteMember(@PathVariable("id") Long id){
-
+        System.out.println(id);
         memberService.deleteMemberById(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

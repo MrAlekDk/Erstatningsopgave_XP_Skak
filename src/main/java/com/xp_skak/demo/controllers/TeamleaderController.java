@@ -48,8 +48,7 @@ public class TeamleaderController {
         return ResponseEntity.status(HttpStatus.OK).body(allTournaments);
     }
 
-    @PostMapping
-    @RequestMapping
+    @PostMapping(value = "/tournaments")
     public ResponseEntity<Tournament> createNewTournament(@RequestBody Tournament newTournament){
         matchService.saveNewTournament(newTournament);
         return ResponseEntity.status(HttpStatus.OK).body(newTournament);

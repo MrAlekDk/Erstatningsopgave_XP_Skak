@@ -14,14 +14,11 @@ import java.util.List;
 public class MatchService {
 
     //TODO Construction injection skal fixes
-    //@Autowired
+    @Autowired
     MatchRepository matchRepository;
+    @Autowired
     TournamentRepository tournamentRepository;
 
-    public MatchService(MatchRepository matchRepository, TournamentRepository tournamentRepository){
-        this.matchRepository=matchRepository;
-        this.tournamentRepository=tournamentRepository;
-    }
 
     public MatchService() {
     }
