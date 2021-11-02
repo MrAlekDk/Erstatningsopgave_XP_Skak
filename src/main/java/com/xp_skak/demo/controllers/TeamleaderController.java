@@ -49,4 +49,16 @@ public class TeamleaderController {
         matchService.saveNewTournament(newTournament);
         return ResponseEntity.status(HttpStatus.OK).body(newTournament);
     }
+
+    @DeleteMapping(value="/tournaments/{id}")
+    public ResponseEntity deleteSpecificTournament(@PathVariable("id") Long id){
+        matchService.deleteTournamentById(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PutMapping(value="/tournaments/{id}")
+    public ResponseEntity updateSpecificTournament(@PathVariable("id") Long id, @RequestBody Tournament updatedTournament){
+        matchService.updateTournament(updatedTournament);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

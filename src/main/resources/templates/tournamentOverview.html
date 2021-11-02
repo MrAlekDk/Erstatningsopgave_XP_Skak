@@ -102,7 +102,7 @@
                 method: "DELETE",
                 headers: {'Accept': 'application/json'}
             }
-            fetch(URL + "/members" + "/" + idToDelete, options)
+            fetch(URL + "/matches/tournaments" + "/" + idToDelete, options)
                 .then(x => {
                     cache.deleteOne(idToDelete)
                     fetchTournaments()
@@ -113,19 +113,6 @@
             const idToEdit = Number(target.dataset.idEdit)
             const user = cache.findById(idToEdit)
             showModal(user)
-        }
-
-        if (target.dataset.idPay) {
-            const idToDelete = Number(target.dataset.idDelete)
-            const options = {
-                method: "POST",
-                headers: {'Accept': 'application/json'}
-            }
-            const idToPay = Number(target.dataset.idPay)
-            fetch(URL + "/members" + "/payments/" + idToPay, options)
-                .then(x => {
-                    fetchTournaments()
-                })
         }
     }
 

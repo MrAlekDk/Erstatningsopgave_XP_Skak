@@ -15,7 +15,6 @@ public class Payment {
     @Column(name = "lastpd", nullable = false)
     private Date lastPaymentDate;
 
-
     public Payment(){
     }
 
