@@ -160,7 +160,7 @@
         tournament.id = Number(document.getElementById("tournament-id").innerText)
         tournament.name = document.getElementById("tournament-name").value
         tournament.date = document.getElementById("tournament-date").value
-        tournament.price = document.getElementById("tournament-price").value
+        tournament.prize = document.getElementById("tournament-price").value
 
         const method = tournament.id ? "PUT" : "POST"
         const url = (method === "PUT") ? URL + "/matches/tournaments" + "/" + tournament.id : URL + "/matches/tournaments"
