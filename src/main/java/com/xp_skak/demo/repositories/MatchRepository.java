@@ -5,12 +5,13 @@ import com.xp_skak.demo.models.Member;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+@Repository
 public interface MatchRepository extends CrudRepository<Match, Long> {
-
     /*
     @Query("delete from Match m where m.winnerMember = ?1")
     void deleteMatchesByWinnerId(Long winnerMember);

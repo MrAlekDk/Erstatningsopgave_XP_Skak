@@ -16,12 +16,9 @@ public class MatchService {
     //TODO Construction injection skal fixes
     @Autowired
     MatchRepository matchRepository;
+    @Autowired
     TournamentRepository tournamentRepository;
 
-    public MatchService(MatchRepository matchRepository, TournamentRepository tournamentRepository) {
-        this.matchRepository = matchRepository;
-        this.tournamentRepository = tournamentRepository;
-    }
 
     public MatchService() {
     }

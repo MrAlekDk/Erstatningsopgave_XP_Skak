@@ -1,7 +1,5 @@
 package com.xp_skak.demo.services;
 
-
-import com.xp_skak.demo.models.Match;
 import com.xp_skak.demo.models.Member;
 import com.xp_skak.demo.models.Payment;
 import com.xp_skak.demo.repositories.MatchRepository;
@@ -12,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class MemberService {
